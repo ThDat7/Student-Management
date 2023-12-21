@@ -1,0 +1,48 @@
+{% extends 'admin/model/modals/details.html' %}
+
+{% block details_table %}
+    <table class="table table-hover table-bordered searchable">
+        {% for c, name in details_columns %}
+            <tr>
+                <td>
+                    <b>{{ name }}</b>
+                </td>
+                <td>
+                    {{ get_value(model, c) }}
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td>
+                <b>Sỉ số</b>
+            </td>
+            <td>
+                {{ model.students|length }}
+            </td>
+        </tr>
+    </table>
+    <table class="table table-striped table-bordered table-hover model-list">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Họ</th>
+            <th>Tên</th>
+            <th>Giới tính</th>
+            <th>Ngày sinh</th>
+            <th>Địa chỉ</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for s in model.students %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ s.last_name }}</td>
+                <td>{{ s.first_name }}</td>
+                <td>{{ s.sex }}</td>
+                <td>{{ s.dob }}</td>
+                <td>{{ s.address }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
