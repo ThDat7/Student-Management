@@ -33,7 +33,13 @@ class TeachForm(Form):
     exams = InlineFieldList(FormField(ExamForm))
 
 
-class TeachView(ModelView):
+class AuthenticatedTeacher(ModelView):
+
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.role == RoleEnum.TEACHER
+
+
+class TeachView(AuthenticatedTeacher):
     column_list = ['id', 'exams']
 
     edit_modal = True

@@ -1,47 +1,40 @@
 {% extends 'admin/model/modals/edit.html' %}
 
-{#{% block body %}#}
-{#    <div class="modal-header">#}
-{#        {% block header_text %}#}
-{#            <h5 class="modal-title">{{ _gettext('Edit Record') + ' #' + request.args.get('id') }}</h5>#}
-{#        {% endblock %}#}
-{#        <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
-{#            <span aria-hidden="true">&times;</span>#}
-{#        </button>#}
-{##}
-{#    </div>#}
-{##}
-{#    <div class="modal-body">#}
-{#        <table class="table table-hover table-bordered searchable">#}
-{#            <tr>#}
-{#                <td>#}
-{#                    <b>123</b>#}
-{#                </td>#}
-{#                <td>#}
-{#                    123#}
-{#                </td>#}
-{#            </tr>#}
-{#        </table>#}
-{##}
-{#        <form onsubmit="updateExams()" action="{{ url_for('.edit_view', id=request.args.get('id'), url=return_url) }}" method="POST" class="admin-form">#}
-{#            <fieldset>#}
-{#                {% include 'admin/model/modals/teach_table.html' %}#}
-{#                <div class="modal-footer">#}
-{#                    {{ lib.render_form_buttons(return_url, extra=None, is_modal=True) }}#}
-{#                </div>#}
-{#            </fieldset>#}
-{#        </form>#}
-{##}
-{#    </div>#}
-{##}
-{#    <script src="{{ url_for('static', filename='js/exams.js') }}"></script>#}
-{#{% endblock %}#}
-
-
 {% block body %}
-    {{ super() }}
+    <div class="modal-header">
+        {% block header_text %}
+            <h5 class="modal-title">{{ _gettext('Edit Record') + ' #' + request.args.get('id') }}</h5>
+        {% endblock %}
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
 
-    <script>
-    document.querySelector('form.admin-form').onsubmit = (e) => {e.preventDefault();console.log((new FormData(document.querySelector('form.admin-form'))).get('exam'))}
-    </script>
+    </div>
+
+    <div class="modal-body">
+        <table class="table table-hover table-bordered searchable">
+            <tr>
+                <td>
+                    <b>123</b>
+                </td>
+                <td>
+                    123
+                </td>
+            </tr>
+        </table>
+
+        <form onsubmit="updateExams()" action="{{ url_for('.edit_view', id=request.args.get('id'), url=return_url) }}" method="POST" class="admin-form">
+            <fieldset>
+                {% include 'admin/model/modals/teach_table.html' %}
+                <div class="modal-footer">
+                    {{ lib.render_form_buttons(return_url, extra=None, is_modal=True) }}
+                </div>
+            </fieldset>
+        </form>
+
+    </div>
+
+
+
+    <script src="{{ url_for('static', filename='js/exams.js') }}"></script>
 {% endblock %}

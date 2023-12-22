@@ -49,7 +49,17 @@ def update():
     return redirect("/admin")
 
 
+@app.route('/normal_exam/update/<id>', methods=['POST'])
+def update_exam(id):
+    data = request.json
+    exam_id = data.get('exam_id')
+    score = data.get('score')
+
+    normal_exam = dao.update_normal_exam(exam_id=exam_id, id=id, score=score)
+    return jsonify(normal_exam)
+
 
 if __name__ == '__main__':
     import sys
+
     app.run(debug=not (hasattr(sys, 'gettrace') and sys.gettrace() is not None))

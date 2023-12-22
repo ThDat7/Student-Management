@@ -1,38 +1,92 @@
 <table class="table table-striped table-bordered table-hover model-list">
-        <thead>
-        <tr>
-            <th></th>
-            <th>Họ</th>
-            <th>Tên</th>
-            <th>Điểm 15'</th>
-            <th>Điểm 1 tiết</th>
-            <th>Điểm thi</th>
+    <thead>
+    <tr>
+        <th></th>
+        <th>Họ</th>
+        <th>Tên</th>
+        <th>Điểm 15'</th>
+        <th>Điểm 1 tiết</th>
+        <th>Điểm thi</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for e in model.exams %}
+        <tr class="exam" id="{{ e.id }}">
+            <td>{{ loop.index }}</td>
+            <td>{{ e.student.last_name }}</td>
+            <td>{{ e.student.first_name }}</td>
+
+            <td class="d15 multiple-score">
+                {% for d in e.normal_exams %}
+                    {% if d.factor.value == 1 %}
+                        <button type="button" class="btn btn-secondary" data-toggle="modal"
+                                id="{{ d.id }}"
+                                data-target="#exam-modal"
+                                data-exam-id="{{ e.id }}"
+                                data-id="{{ d.id }}"
+                                data-score="{{ d.score }}">
+
+                            {{ d.score }}
+                        </button>
+                    {% endif %}
+                {% endfor %}
+            </td>
+            <td class="d45 multiple-score">
+                {% for d in e.normal_exams %}
+                    {% if d.factor.value == 2 %}
+                        <input type="number" class="normal-exam" id="{{ d.id }}" style='width:20%' value='{{ d.score }}'
+                               readonly/>
+                    {% endif %}
+                {% endfor %}
+            </td>
+
+            <td><input type="number" class="final-exam" id="{{ e.final_exam.exam_id }}" value='{{ e.final_exam.score }}'
+                       readonly/></td>
         </tr>
-        </thead>
-        <tbody>
-        {% for e in model.exams %}
-            <tr class="exam" id="{{ e.id }}">
-                <td>{{ loop.index }}</td>
-                <td>{{ e.student.last_name }}</td>
-                <td>{{ e.student.first_name }}</td>
-
-                <td class="d15 multiple-score">
-                    {% for d in e.normal_exams %}
-                        {% if d.factor.value == 1 %}
-                            <input type="number" class="normal-exam" id="{{ d.id }}" step="0.1" style='width:20%' value='{{ d.score }}' {% if readonly %}readonly {% endif %}/>
-                            {% endif %}
-                    {% endfor %}
-                </td>
-                <td class="d45 multiple-score">
-                    {% for d in e.normal_exams %}
-                        {% if d.factor.value == 2 %}
-                            <input type="number" class="normal-exam" id="{{ d.id }}" style='width:20%' value='{{ d.score }}' {% if readonly %}readonly {% endif %}/>
-                        {% endif %}
-                    {% endfor %}
-                </td>
-
-                <td ><input type="number" class="final-exam" id="{{ e.final_exam.exam_id }}" value='{{ e.final_exam.score }}'  {% if readonly %}readonly{% endif %}/></td>
-            </tr>
-        {% endfor %}
-        </tbody>
+    {% endfor %}
+    </tbody>
 </table>
+
+<div class="modal fade" id="exam-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            </div>
+            <div class="modal-body">
+                <input type="number"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#exam-modal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var exam_id = button.data('exam-id')
+        var id = button.data('id')
+        var score = button.data('score')
+
+        var modal = $(this)
+        modal.find('.modal-body input').val(score)
+        modal.find('.modal-footer button').on('click', () => {
+            console.log(123)
+            $.ajax({
+                type: 'post',
+                url: `/normal_exam/update/${id}`,
+                data: JSON.stringify({
+                    'exam_id': exam_id,
+                    'score': modal.find('.modal-body input').val()
+                }),
+                contentType: "application/json; charset=utf-8",
+                traditional: true,
+                success: (data) => {
+                }
+            })
+        })
+    })
+</script>

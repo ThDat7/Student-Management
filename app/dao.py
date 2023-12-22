@@ -54,20 +54,29 @@ def update_exams(id, exams):
 
     for e_form in exams:
         e_db = (db.session.query(Exam)
-         .filter(Exam.id.__eq__(e_form.id))
-         .first())
+                .filter(Exam.id.__eq__(e_form.id))
+                .first())
 
         # for n_e_form in e_form.normal_exams:
         #     new_n_e = NormalExam(id=n_e_form.id, score=n_e_form.score)
         #     if new_n_e.id is None:
         #         e_db.normal_exams.append(new_n_e)
-
-
-
-    # for e_db in exams_db:
-    #     for n_e_db in e_db.normal_exams:
-    #         if n_e_db.id ==
-
-
-
     db.session.commit()
+
+
+def update_normal_exam(exam_id, id, score):
+    normal_exam = (db.session.query(NormalExam)
+                   .join(Exam)
+                   .join(Teach)
+                   .join(Teacher)
+                   .join(User)
+                   .filter(User.id.__eq__(current_user.id),
+                           Exam.id.__eq__(exam_id),
+                           NormalExam.id.__eq__(id))
+                   .first())
+    if normal_exam:
+        normal_exam.score = score
+        db.session.commit()
+        return normal_exam
+
+    return None

@@ -25,7 +25,7 @@ function updateExams() {
             'Content-Type': 'application/json'
         }
     }).then(function (res) {
-        return res.json();
+        return res.json()
     }).then(function (data) {
         console.log(data)
     });
