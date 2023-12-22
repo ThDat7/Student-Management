@@ -1,8 +1,0 @@
-{% extends 'admin/model/modals/details.html' %}
-
-{% block details_table %}
-    {{ super() }}
-        {% with readonly=True %}
-    {% include 'admin/model/modals/teach_table.html' %}
-{% endwith %}
-{% endblock %}

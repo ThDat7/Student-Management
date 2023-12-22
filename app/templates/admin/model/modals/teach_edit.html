@@ -15,26 +15,28 @@
         <table class="table table-hover table-bordered searchable">
             <tr>
                 <td>
-                    <b>123</b>
+                    <b>Năm học:</b>
+                    {{ model.year }}
                 </td>
                 <td>
-                    123
+                    <b>Học kỳ:</b>
+                    {{ model.semester }}
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <b>Lớp học:</b>
+                    {{ model.classroom }}
+                </td>
+
+                <td>
+                    <b>Môn học:</b>
+                    {{ model.subject }}
                 </td>
             </tr>
         </table>
 
-        <form onsubmit="updateExams()" action="{{ url_for('.edit_view', id=request.args.get('id'), url=return_url) }}" method="POST" class="admin-form">
-            <fieldset>
-                {% include 'admin/model/modals/teach_table.html' %}
-                <div class="modal-footer">
-                    {{ lib.render_form_buttons(return_url, extra=None, is_modal=True) }}
-                </div>
-            </fieldset>
-        </form>
-
+        {% include 'admin/model/modals/teach_table.html' %}
     </div>
-
-
-
-    <script src="{{ url_for('static', filename='js/exams.js') }}"></script>
 {% endblock %}

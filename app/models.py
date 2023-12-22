@@ -214,7 +214,11 @@ if __name__ == '__main__':
         # Tạo học sinh
         student1 = Student(last_name="Hoc", first_name="Sinh", dob=datetime.now(), sex=True, address="")
         student2 = Student(last_name="Sinh", first_name="Vien", dob=datetime.now(), sex=False, address="")
-        db.session.add_all([student1, student2])
+        student3 = Student(last_name="Thanh", first_name="Dat", dob=datetime.now(), sex=True, address="")
+        student4 = Student(last_name="Thanh", first_name="Hai", dob=datetime.now(), sex=True, address="")
+        student5 = Student(last_name="Minh", first_name="Hoang", dob=datetime.now(), sex=True, address="")
+        student6 = Student(last_name="ABC", first_name="XYZ", dob=datetime.now(), sex=True, address="")
+        db.session.add_all([student1, student2, student3, student4, student5, student6])
         db.session.commit()
 
         #################### Tạo lớp học
@@ -225,6 +229,10 @@ if __name__ == '__main__':
         # Thêm học sinh vào lớp học
         classroom1.students.append(student1)
         classroom1.students.append(student2)
+        classroom1.students.append(student3)
+        classroom1.students.append(student4)
+        classroom1.students.append(student5)
+        classroom1.students.append(student6)
         db.session.commit()
 
         classroom2 = Classroom(grade=GradeEnum.ELEVENTH, order=1, year=2023, homeroom_teacher=teacher1)

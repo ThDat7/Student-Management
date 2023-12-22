@@ -21,7 +21,7 @@ class ClassroomView(AuthenticatedStaff):
     create_modal = True
     column_list = ['id', 'grade', 'order', 'year', 'homeroom_teacher', 'student_count']
     column_labels = {
-        'id': 'STT',
+        'id': 'Mã số',
         'grade': 'Khối',
         'order': 'Thứ tự lớp',
         'year': 'Năm học',
@@ -38,7 +38,7 @@ class ClassroomView(AuthenticatedStaff):
         n, cls = result
         for c in cls:
             number_student = (self.session.query(func.count(student_classroom.c.student_id))
-             .filter(student_classroom.c.classroom_id == c.id)).scalar()
+                              .filter(student_classroom.c.classroom_id == c.id)).scalar()
             c.student_count = number_student
         return result
 

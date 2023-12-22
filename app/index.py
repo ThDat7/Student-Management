@@ -26,37 +26,74 @@ def login_admin():
     if request.method == 'POST':
         username = request.form.get("username")
         password = request.form.get("password")
-        user = dao.authenicate_user(username, password)
+        user = dao.authenticate_user(username, password)
         if user:
             login_user(user=user)
     return redirect("/admin")
 
 
-@app.route("/api/count-student-in-class", methods=['get'])
-def count_student_in_class():
-    pass
-
-
-@app.route("/update", methods=['POST'])
-def update():
+@app.route('/api/exam', methods=['POST'])
+def create_exam():
     data = request.json
+    student_id = data.get('student_id')
+    teach_id = data.get('teach_id')
 
-    id = data.get('id')
-    exams = data.get('exams')
+    exam = dao.create_exam(student_id, teach_id)
 
-    dao.update_exams(id, exams)
+    return jsonify({
+        'id': exam.id,
+        'student_id': exam.student_id
+    })
 
-    return redirect("/admin")
 
-
-@app.route('/normal_exam/update/<id>', methods=['POST'])
-def update_exam(id):
+@app.route('/api/normal_exam/<id>', methods=['PUT'])
+def update_normal_exam(id):
     data = request.json
     exam_id = data.get('exam_id')
     score = data.get('score')
 
-    normal_exam = dao.update_normal_exam(exam_id=exam_id, id=id, score=score)
-    return jsonify(normal_exam)
+    normal_exam = dao.update_normal_exam(exam_id, id, score)
+    return jsonify({
+        'id': normal_exam.id,
+        'score': normal_exam.score,
+        'exam_id': normal_exam.exam_id,
+    })
+
+
+@app.route('/api/normal_exam', methods=['POST'])
+def create_normal_exam():
+    data = request.json
+    exam_id = data.get('exam_id')
+    factor = data.get('factor')
+    score = data.get('score')
+
+    normal_exam = dao.create_normal_exam(exam_id, factor, score)
+    return jsonify({
+        'id': normal_exam.id,
+        'score': normal_exam.score,
+        'exam_id': normal_exam.exam_id,
+    })
+
+
+@app.route('/api/normal_exam/<id>', methods=['DELETE'])
+def delete_normal_exam(id):
+    data = request.json
+    exam_id = data.get('exam_id')
+
+    id = dao.delete_normal_exam(id, exam_id)
+    return jsonify({'id': id})
+
+
+@app.route('/api/final_exam/<id>', methods=['POST'])
+def update_final_exam(id):
+    data = request.json
+    score = data.get('score')
+
+    exam = dao.update_final_exam(exam_id=id, score=score)
+    return jsonify({
+        'score': exam.final_exam.score,
+        'exam_id': exam.id,
+    })
 
 
 if __name__ == '__main__':
