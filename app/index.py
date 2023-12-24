@@ -96,7 +96,25 @@ def update_final_exam(id):
     })
 
 
+def init_config_defaults():
+    default_configs = [
+        (ConfigKeyEnum.MIN_AGE, 17),
+        (ConfigKeyEnum.MAX_AGE, 20),
+        (ConfigKeyEnum.MAX_NUM, 40),
+    ]
+
+    for key, value in default_configs:
+        config_entry = db.session.query(Config).filter_by(key=key).first()
+        if config_entry is None:
+            config_entry = Config(key=key, value=value)
+            db.session.add(config_entry)
+            db.session.commit()
+
+
 if __name__ == '__main__':
     import sys
+
+    with app.app_context():
+        init_config_defaults()
 
     app.run(debug=not (hasattr(sys, 'gettrace') and sys.gettrace() is not None))

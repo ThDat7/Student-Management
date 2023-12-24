@@ -88,8 +88,65 @@ def update_final_exam(exam_id, score):
 
 def get_teach_data(teach_id):
     teach = ((db.session.query(Teach)
-                  .filter(Teach.id.__eq__(teach_id)))
-                 .first())
+              .filter(Teach.id.__eq__(teach_id)))
+             .first())
+
+    classroom = teach.classroom
+
+    students = classroom.students
+
+    data = {
+        'teach_id': teach_id,
+        'year': classroom.year,
+        'semester': teach.semester.value,
+        'classroom': classroom.__str__(),
+        'subject': teach.subject,
+        'students': []
+    }
+
+    for student in students:
+        student_data = {
+            'id': student.id,
+            'last_name': student.last_name,
+            'first_name': student.first_name,
+            'exam': None
+        }
+
+        exam = (db.session.query(Exam)
+                .filter(Exam.student_id.__eq__(student.id),
+                        Exam.teach_id.__eq__(teach_id))).first()
+
+        exam_data = None
+        if exam:
+            exam_data = {
+                'id': exam.id,
+                'normal_exams': [],
+                'final_exam': None
+            }
+
+            if exam.final_exam is not None:
+                exam_data['final_exam'] = {
+                    'score': exam.final_exam.score
+                }
+
+            for normal_exam in exam.normal_exams:
+                normal_exam_data = {
+                    'id': normal_exam.id,
+                    'factor': normal_exam.factor,
+                    'score': normal_exam.score
+                }
+                exam_data['normal_exams'].append(normal_exam_data)
+
+        student_data['exam'] = exam_data
+        data['students'].append(student_data)
+
+    return data
+
+
+def get_score_average_stats(teach_id):
+    teach = ((db.session.query(Teach)
+              .filter(Teach.id.__eq__(teach_id)))
+             .first())
 
     classroom = teach.classroom
 
