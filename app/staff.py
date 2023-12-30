@@ -1,3 +1,5 @@
+import warnings
+
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import BaseView, expose
 from app import app, db, admin
@@ -50,15 +52,33 @@ class StudentView(AuthenticatedStaff):
     edit_modal = True
     details_modal = True
     create_modal = True
-    column_list = ['id', 'last_name', 'first_name', 'dob', 'sex', 'address', 'email']
+    column_list = ['id', 'last_name', 'first_name', 'dob', 'sex', 'address', 'email', 'classroom']
     column_labels = {
         'id': 'STT',
         'last_name': 'Họ',
         'first_name': 'Tên',
         'dob': 'Ngày sinh',
         'sex': 'Giới tính',
-        'address': 'Địa chỉ'
+        'address': 'Địa chỉ',
+        'classroom': 'Lớp học'
     }
+
+    form_excluded_columns = ('classroom')
+
+    def on_model_change(self, form, model, is_created):
+        msg = None
+
+        age = datetime.now().year - form.data['dob'].year
+
+        from sqlalchemy import or_
+        config_age = self.session.query(Config).filter(or_(Config.key==ConfigKeyEnum.MAX_AGE, Config.key==ConfigKeyEnum.MIN_AGE)).all()
+        for int_config in config_age:
+            if int_config.key == ConfigKeyEnum.MIN_AGE and age < int_config.value:
+                msg = 'Tuổi nhỏ hơn quy định'
+            elif int_config.key == ConfigKeyEnum.MAX_AGE and age > int_config.value:
+                msg = 'Tuổi lớn hơn quy định'
+        if msg is not None:
+            raise Exception(msg)
 
 
 admin.add_view(ClassroomView(Classroom, db.session, name='Quản Lý Lớp Học'))

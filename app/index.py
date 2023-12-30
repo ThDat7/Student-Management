@@ -67,6 +67,27 @@ def create_normal_exam():
     factor = data.get('factor')
     score = data.get('score')
 
+    if exam_id is not None:
+        exam = db.session.query(Exam).filter(Exam.id.__eq__(exam_id)).first()
+        msg_error = None
+
+        len15p, len45p = 0, 0
+        if exam.normal_exams is not None:
+            for normal_exam in exam.normal_exams:
+                if normal_exam.factor == FactorEnum.I:
+                    len15p += 1
+                else:
+                    len45p += 1
+
+            if factor=='I' and len15p >= 5:
+                msg_error = 'Số cột điểm 15p đang lớn hơn quy định'
+            elif factor=='II' and len45p >= 3:
+                msg_error = 'Số cột điểm 45p đang lớn hơn quy định'
+
+            if msg_error is not None:
+                return jsonify('')
+
+
     normal_exam = dao.create_normal_exam(exam_id, factor, score)
     return jsonify({
         'id': normal_exam.id,
