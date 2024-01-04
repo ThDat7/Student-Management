@@ -64,7 +64,6 @@ if __name__ == '__main__':
         classroom1.students.append(student3)
         classroom1.students.append(student4)
         classroom1.students.append(student5)
-        classroom1.students.append(student6)
         db.session.commit()
 
         classroom2 = Classroom(grade=GradeEnum.ELEVENTH, order=1, year=2023, homeroom_teacher=teacher1)

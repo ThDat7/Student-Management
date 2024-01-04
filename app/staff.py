@@ -2,10 +2,12 @@ import warnings
 
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import BaseView, expose
+from wtforms.fields.simple import HiddenField
+
 from app import app, db, admin
 from app.models import *
 from flask_login import current_user, logout_user
-from flask import redirect
+from flask import redirect, request
 
 
 class AuthenticatedStaff(ModelView):
@@ -31,6 +33,7 @@ class ClassroomView(AuthenticatedStaff):
         'student_count': 'Sỉ số'
     }
     details_modal_template = 'admin/model/modals/classroom_details.html'
+    edit_modal_template = 'admin/model/modals/classroom_edit.html'
 
     def get_list(self, page, sort_column, sort_desc, search, filters,
                  execute=True, page_size=None):

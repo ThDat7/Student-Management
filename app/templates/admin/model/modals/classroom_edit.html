@@ -1,0 +1,169 @@
+{% extends 'admin/model/modals/edit.html' %}
+{% from 'admin/model/modals/classroom_table.html' import render_classroom_table with context %}
+
+{% block body %}
+
+    <div class="modal-header">
+        {% block header_text %}
+            <h5 class="modal-title">{{ _gettext('Edit Record') + ' #' + request.args.get('id') }}</h5>
+        {% endblock %}
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+
+    </div>
+
+    {% call lib.form_tag(action=url_for('.edit_view', id=request.args.get('id'), url=return_url)) %}
+        <div class="modal-body">
+            {{ lib.render_form_fields(form, form_opts=form_opts) }}
+
+            <div class="d-flex" style="height: 12rem">
+                <div class="w-50 py-3">
+                    <input type="text" class="form-control searchInput" placeholder="Nhập tên học sinh">
+                    <div class="list-group searchResults"></div>
+                </div>
+                <div style='display:none' class="selectedStudent container w-50 py-3">
+                    Họ: <span class="last_name"></span> <br/>
+                    Tên: <span class="first_name"></span> <br/>
+                    Giới tính: <span class="sex"></span> <br/>
+                    Ngày sinh: <span class="dob"></span> <br/>
+                    Địa chỉ: <span class="address"></span> <br/>
+                    <button type="button" class="btn btn-success add-student">Thêm</button>
+                </div>
+            </div>
+
+
+            {{ render_classroom_table(students=model.students, is_edit=True) }}
+        </div>
+        <div class="modal-footer">
+            {{ lib.render_form_buttons(return_url, extra=None, is_modal=True) }}
+        </div>
+    {% endcall %}
+
+
+    </div>
+
+
+    <script src="{{ url_for('static', filename='assets/js/lodash.min.js') }}"></script>
+
+    <script>
+        var searchResults = $('.searchResults')
+        var selectedStudent = $('.selectedStudent')
+        var searchInput = $('.searchInput')
+
+        function displayResults(results) {
+            searchResults.html('')
+            for (let student of results.students) {
+                let resultItem = $(`<a href="#" class="dropdown-item">${student.full_name}</a>`)
+
+                resultItem.on('mouseenter', () => {
+                    $.ajax({
+                        type: "GET",
+                        url: `/api/student/${student.id}`,
+                        contentType: "application/json; charset=utf-8",
+                        success: function (result) {
+                            selectedStudent.find('span.last_name').text(result.student.last_name)
+                            selectedStudent.find('span.first_name').text(result.student.first_name)
+                            selectedStudent.find('span.sex').text(result.student.sex)
+                            selectedStudent.find('span.dob').text(result.student.dob)
+                            selectedStudent.find('span.address').text(result.student.address)
+                            selectedStudent.find('button').data('student-id', student.id)
+                            selectedStudent.show()
+                        }
+                    })
+
+                    resultItem.on('mouseleave', () => {
+                        selectedStudent.find('button').data('student-id', '')
+                        selectedStudent.hide()
+                    })
+
+                    resultItem.on('click', () => {
+                        resultItem.off('mouseleave')
+                        searchResults.addClass('d-none')
+                    })
+                })
+
+                searchResults.append(resultItem)
+            }
+
+            searchResults.toggleClass('d-none', results.length === 0)
+        }
+
+        $('button.add-student').on('click', (event) => {
+            let classroomTableBody = $('.classroom-table').find('tbody')
+            let studentId = $('button.add-student').data('student-id')
+
+            let index = parseInt(classroomTableBody.find('tr').last().text()) + 1
+            let lastname = selectedStudent.find('span.last_name').text()
+            let firstname = selectedStudent.find('span.first_name').text()
+            let sex = selectedStudent.find('span.sex').text()
+            let dob = selectedStudent.find('span.dob').text()
+            let address = selectedStudent.find('span.address').text()
+
+            classroomTableBody.append(`
+                <tr data-student-id=${studentId}>
+                <td>${index}</td>
+                <td>${lastname}</td>
+                <td>${firstname}</td>
+                <td>${sex}</td>
+                <td>${dob}</td>
+                <td>${address}</td>
+                <td>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-trash delete-student" viewBox="0 0 16 16"
+                         style="cursor: pointer">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                    </svg>
+                </td>
+            </tr>
+            `)
+            $('.delete-student').on('click', function () {
+                $(this).closest('tr').remove()
+            })
+
+
+            selectedStudent.find('button').data('student-id', '')
+            selectedStudent.hide()
+            searchInput.val('')
+            searchInput.focus()
+        })
+
+        searchInput.on('keyup', _.debounce(function (e) {
+            let student_name = searchInput.val()
+            if (student_name === '')
+                return
+
+            let table_ids  = $('.classroom-table > tbody tr').map(function () {
+                return $(this).data('student-id');
+            }).get();
+            $.ajax({
+                type: "GET",
+                url: "/api/search_student",
+                data: {
+                    'student_name': student_name,
+                    'exclude_ids': table_ids
+                },
+                contentType: "application/json; charset=utf-8",
+                success: function (results) {
+                    displayResults(results)
+                }
+            })
+        }, 300))
+
+        $('input[type=submit]').on('click', (event) => {
+            event.preventDefault()
+
+            let form = $('form.admin-form')
+            form.find('[name="students"]').remove()
+
+            let studentsIdFromTable = $('.classroom-table > tbody tr').map(function () {
+                return $(this).data('student-id');
+            }).get();
+            for (const id of studentsIdFromTable)
+                form.append(`<input class='d-none' name="students" type="number" value="${id}"/>`)
+
+            form.submit()
+        })
+    </script>
+{% endblock %}

@@ -1,4 +1,5 @@
 from flask_login import current_user
+from sqlalchemy import func
 
 from app.models import *
 from app import app
@@ -6,12 +7,13 @@ import hashlib
 
 
 def get_user_by_id(user_id):
-    return User.query.get(user_id)
+    return db.session.get(User, user_id)
 
 
 def authenticate_user(username, password):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
-    return User.query.filter(User.username.__eq__(username.strip()), User.password.__eq__(password.strip())).first()
+    return db.session.query(User).filter(User.username.__eq__(username.strip()),
+                                         User.password.__eq__(password.strip())).first()
 
 
 def create_exam(student_id, teach_id):
@@ -41,11 +43,35 @@ def update_normal_exam(exam_id, id, score):
 
 
 def create_normal_exam(exam_id, factor, score):
+    validate_exams_number_rule(exam_id, factor)
+
     normal_exam = NormalExam(exam_id=exam_id, factor=factor, score=score)
     db.session.add(normal_exam)
     db.session.commit()
 
     return normal_exam
+
+
+def validate_exams_number_rule(exam_id, factor):
+    if exam_id is not None:
+        exam = db.session.query(Exam).filter(Exam.id.__eq__(exam_id)).first()
+        msg_error = None
+
+        len15p, len45p = 0, 0
+        if exam.normal_exams is not None:
+            for normal_exam in exam.normal_exams:
+                if normal_exam.factor == FactorEnum.I:
+                    len15p += 1
+                else:
+                    len45p += 1
+
+            if factor == 'I' and len15p >= 5:
+                msg_error = 'Số cột điểm 15p đang lớn hơn quy định'
+            elif factor == 'II' and len45p >= 3:
+                msg_error = 'Số cột điểm 45p đang lớn hơn quy định'
+
+            if msg_error is not None:
+                raise Exception(msg_error)
 
 
 def delete_normal_exam(id, exam_id):
@@ -198,3 +224,25 @@ def get_score_average_stats(teach_id):
         data['students'].append(student_data)
 
     return data
+
+
+def search_students_by_name(student_name, exclude_ids):
+    students = (db.session.query(func.concat(Student.last_name, ' ', Student.first_name), Student.id)
+                .filter(
+        func.concat(Student.last_name, ' ', Student.first_name).ilike(f"%{student_name}%"),
+        ~Student.id.in_(exclude_ids))
+                .order_by(Student.first_name)).all()
+
+    return [{'full_name': full_name, 'id': id} for (full_name, id) in students]
+
+
+def get_student(id):
+    student = (db.session.query(Student)
+               .filter(Student.id == id)).first()
+
+    return {'last_name': student.last_name,
+            'first_name': student.first_name,
+            'sex': student.sex,
+            'dob': student.dob,
+            'address': student.address
+            }
