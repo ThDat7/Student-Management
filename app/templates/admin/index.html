@@ -1,12 +1,14 @@
 {% extends 'admin/master.html' %}
 
 {% block body %}
+<div class="container">
     {% if current_user.is_authenticated %}
         <h1 class="text-center text-info">CHÀO MỪNG ĐẾN VỚI TRANG QUẢN TRỊ</h1>
         <h2 class="text-info">Chào {{ current_user.first_name }}!!!</h2>
     {% else %}
         {% include 'admin/login.html' %}
     {% endif %}
+<<<<<<< HEAD
     </div>
 
     <style>
@@ -14,4 +16,13 @@
             background-image: url(../static/assets/images/choosing-bg.jpg)
         }
     </style>
+=======
+</div>
+
+<style>
+    body {
+        background-image: url(../static/assets/images/choosing-bg.jpg)
+    }
+</style>
+>>>>>>> 817a1496fe1fa89e4ca2a426eae82ccbd4802beb
 {% endblock %}
