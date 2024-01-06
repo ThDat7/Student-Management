@@ -15,9 +15,12 @@
                 </ul>
             </li>
             <li><a href="#section4">Courses</a></li>
+            <li><a href="#section6">Contact</a></li>
             {% if current_user.is_authenticated %}
-            <li><img src="{{current_user.avatar}}" class="rounded" width="50"/><a href="/admin" class="btn btn-info">Chào
-                {{current_user.username}}</a></li>
+            <li><img src="{{current_user.avatar}}" class="rounded" width="50" height="50"/>
+                <a href="/admin" class="btn btn-info">
+                Chào {{current_user.first_name}}</a>
+            </li>
             {% else %}
             <li><a href="/admin" class="btn btn-info">Login</a></li>
             {% endif %}}

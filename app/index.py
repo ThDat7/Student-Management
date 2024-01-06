@@ -1,9 +1,10 @@
-import str as str
+# import str as str
 from flask import render_template, request, redirect, jsonify, Response
 from flask_login import login_user, logout_user, current_user
 from app import login, dao
 from app.models import *
 import admin, staff, teacher, utilview
+
 
 @app.route('/')
 def index():

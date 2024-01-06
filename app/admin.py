@@ -6,6 +6,7 @@ from flask_login import current_user
 from teacher import AverageScoreStatsView
 
 
+
 class AuthenticatedAdminModelView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.role == RoleEnum.ADMIN
