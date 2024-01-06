@@ -1,9 +1,9 @@
+import str as str
 from flask import render_template, request, redirect, jsonify, Response
-from flask_login import login_user
+from flask_login import login_user, logout_user, current_user
 from app import login, dao
 from app.models import *
 import admin, staff, teacher, utilview
-
 
 @app.route('/')
 def index():
@@ -27,9 +27,17 @@ def login_admin():
         username = request.form.get("username")
         password = request.form.get("password")
         user = dao.authenticate_user(username, password)
-        if user:
-            login_user(user=user)
-    return redirect("/admin")
+        try:
+            Next = request.args.get('next')
+            if user:
+                login_user(user=user)
+                return redirect('/' if Next is None else Next)
+            else:
+                err_msg = 'ĐĂNG NHẬP THẤT BẠI VUI LÒNG KIỂM TRA LẠI UserName Hoặc PassWord!!!'
+        except Exception as ex:
+            err_msg = "ĐĂNG NHẬP THẤT BẠI NGƯỜI DÙNG %s KHÔNG TỒN %s " % (username, str(ex))
+
+    return render_template('admin/login.html', err_msg=err_msg)
 
 
 @app.route('/api/exam', methods=['POST'])
@@ -131,6 +139,20 @@ def init_config_defaults():
             config_entry = Config(key=key, value=value)
             db.session.add(config_entry)
             db.session.commit()
+
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    logout_user()
+    return redirect('/admin')
+
+
+@app.route('/admin/upload', methods=['GET', 'POST'])
+def upload_img():
+    if request.method.__eq__('POST'):
+        avatar = request.files.get('avatar')
+        dao.upload_image(avatar=avatar, id=current_user.id)
+    return redirect('/admin')
 
 
 if __name__ == '__main__':

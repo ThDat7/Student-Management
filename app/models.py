@@ -8,7 +8,6 @@ import enum
 import hashlib
 
 
-
 class RoleEnum(enum.Enum):
     ADMIN = "admin"
     STAFF = "staff"
@@ -58,9 +57,12 @@ class User(db.Model, UserMixin):
     first_name = Column(String(20), nullable=False)
     dob = Column(DateTime, nullable=False)
     sex = Column(Boolean, nullable=False)
-    address = Column(String(255))
-    phone = Column(String(11))
-    email = Column(String(100))
+    address = Column(String(255), default="text")
+    phone = Column(String(11), default="text")
+    email = Column(String(100), default="text")
+    avatar = Column(String(255),
+                    default='https://res.cloudinary.com/dh5jcbzly/image/upload/v1703666812/hme7xdtwowv4rloj1dzq.jpg')
+    joined_date = Column(DateTime, default=datetime.now())
 
     role = Column(Enum(RoleEnum), ForeignKey('role.name'), nullable=False)
 
@@ -168,4 +170,3 @@ class Config(db.Model):
     __tablename__ = 'config'
     key = Column(Enum(ConfigKeyEnum), primary_key=True)
     value = Column(Integer, nullable=False)
-

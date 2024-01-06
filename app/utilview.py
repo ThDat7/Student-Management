@@ -3,16 +3,9 @@ from app import admin
 from flask_login import current_user, logout_user
 from flask import redirect
 
-
-class LogoutView(BaseView):
+class HomePageView(BaseView):
     @expose('/')
     def index(self):
-        logout_user()
+        return redirect('/')
 
-        return redirect('/admin')
-
-    def is_accessible(self):
-        return current_user.is_authenticated
-
-
-admin.add_view(LogoutView(name="Đăng xuất"))
+admin.add_view(HomePageView(name='HomePage'))

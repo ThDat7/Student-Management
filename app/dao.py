@@ -1,6 +1,6 @@
 from flask_login import current_user
 from sqlalchemy import func
-
+import cloudinary.uploader
 from app.models import *
 from app import app
 import hashlib
@@ -246,3 +246,13 @@ def get_student(id):
             'dob': student.dob,
             'address': student.address
             }
+
+
+def upload_image(avatar, id):
+    user = db.session.query(User).filter(User.id.__eq__(id)).first()
+    if avatar:
+        res = cloudinary.uploader.upload(avatar)
+        user.avatar = res['secure_url']
+
+    db.session.add(user)
+    db.session.commit()

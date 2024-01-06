@@ -19,20 +19,20 @@ if __name__ == '__main__':
         #################### admin
         # Tạo người dùng
         user1 = User(username="admin", password=str(hashlib.md5('123'.encode('utf-8')).hexdigest()), last_name="Doe",
-                     first_name="John", dob=datetime.now(), sex=True, address="", phone="", email="john@example.com",
+                     first_name="John", dob=datetime.now(), sex=True, email="john@example.com",
                      role=admin_role.name)
         user2 = User(username="ad", password=str(hashlib.md5('123'.encode('utf-8')).hexdigest()), last_name="Smith",
-                     first_name="Alice", dob=datetime.now(), sex=False, address="", phone="", email="alice@example.com",
+                     first_name="Alice", dob=datetime.now(), sex=False, email="alice@example.com",
                      role=admin_role.name)
         db.session.add_all([user1, user2])
         db.session.commit()
         #################### giao vien va nhan vien
         # Tạo giao vien va staff
         user3 = User(username="gv", password=str(hashlib.md5('123'.encode('utf-8')).hexdigest()), last_name="Giao",
-                     first_name="Vien", dob=datetime.now(), sex=True, address="", phone="",
+                     first_name="Vien", dob=datetime.now(), sex=True,
                      email="giaovien@example.com", role=teacher_role.name)
         user4 = User(username="nv", password=str(hashlib.md5('123'.encode('utf-8')).hexdigest()), last_name="Nhan",
-                     first_name="Vien", dob=datetime.now(), sex=False, address="", phone="",
+                     first_name="Vien", dob=datetime.now(), sex=False,
                      email="nhanvien@example.com", role=staff_role.name)
         db.session.add_all([user3, user4])
         db.session.commit()
