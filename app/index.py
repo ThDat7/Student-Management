@@ -68,7 +68,7 @@ def update_normal_exam(id):
             'exam_id': normal_exam.exam_id,
         })
     except Exception as e:
-        return Response(str(e.err_msg), status=400)
+        return Response(str(e), status=400)
 
 
 @app.route('/api/normal_exam', methods=['POST'])
@@ -86,7 +86,7 @@ def create_normal_exam():
             'exam_id': normal_exam.exam_id,
         })
     except Exception as e:
-        return Response(str(e.meesage), status=400)
+        return Response(str(e), status=400)
 
 
 @app.route('/api/normal_exam/<id>', methods=['DELETE'])
@@ -109,7 +109,7 @@ def update_final_exam(id):
             'exam_id': exam.id,
         })
     except Exception as e:
-        return Response(str(e.meesage), status=400)
+        return Response(str(e), status=400)
 
 
 @app.route('/api/search_student', methods=['GET'])
