@@ -2,7 +2,11 @@
 
 {% block body %}
 {% if current_user.is_authenticated %}
-
+    <style>
+        nav.navbar {
+            display: block !important;
+        }
+    </style>
 <div class="container">
     <section style="background-color: #eee;">
         <div class="container py-5">
@@ -111,8 +115,13 @@
             </div>
         </div>
     </section>
-    {% else %}
-    {% include 'admin/login.html' %}
-    {% endif %}
+{% else %}
+    <style>
+        nav.navbar {
+            display: none !important;
+        }
+    </style>
+{% include 'admin/login.html' %}
+{% endif %}
 </div>
 {% endblock %}

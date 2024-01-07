@@ -29,15 +29,16 @@
     <link href="{{ admin_static.url(filename='admin/css/bootstrap4/admin.css', v='1.1.1') }}" rel="stylesheet">
     <link href="{{ admin_static.url(filename='bootstrap/bootstrap4/css/font-awesome.min.css', v='4.7.0') }}"
           rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/images/hdh.png') }}">
 
     <!-- Bootstrap core CSS -->
     <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="../static/assets/css/fontawesome.css">
-    <link rel="stylesheet" href="../static/assets/css/templatemo-grad-school.css">
-    <link rel="stylesheet" href="../static/assets/css/owl.css">
-    <link rel="stylesheet" href="../static/assets/css/lightbox.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/fontawesome.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templatemo-grad-school.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/owl.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/lightbox.css') }}">
 
     {% if admin_view.extra_css %}
     {% for css_url in admin_view.extra_css %}
