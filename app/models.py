@@ -118,13 +118,12 @@ class Classroom(db.Model):
     students = relationship('Student', secondary="student_classroom", backref=db.backref('classroom'))
     student_count = None
 
-    def __str__(self):
-        return str(self.grade.value) + 'A' + str(self.order)
-
-
-student_classroom = db.Table('student_classroom',
+    student_classroom = db.Table('student_classroom',
                              Column("student_id", Integer, ForeignKey("student.id"), primary_key=True),
                              Column("classroom_id", Integer, ForeignKey("classroom.id"), primary_key=True))
+
+    def __str__(self):
+        return str(self.grade.value) + 'A' + str(self.order)
 
 
 class Subject(db.Model):
