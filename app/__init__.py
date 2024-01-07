@@ -14,8 +14,8 @@ cloudinary.config(
 )
 
 app.secret_key = "14124512B3JKB12IBTIB3214TNY23KLBJ4TB3JKT3B4TUB3T43%%#%^46%$#^#$%@$%2"
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:%s@localhost/student_data?charset=utf8mb4" % quote(
-    'Admin@123')
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:%s@localhost/student-data?charset=utf8mb4" % quote(
+    '123456a@A')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
 # Phân trang

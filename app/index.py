@@ -60,13 +60,15 @@ def update_normal_exam(id):
     data = request.json
     exam_id = data.get('exam_id')
     score = data.get('score')
-
-    normal_exam = dao.update_normal_exam(exam_id, id, score)
-    return jsonify({
-        'id': normal_exam.id,
-        'score': normal_exam.score,
-        'exam_id': normal_exam.exam_id,
-    })
+    try:
+        normal_exam = dao.update_normal_exam(exam_id, id, float(score))
+        return jsonify({
+            'id': normal_exam.id,
+            'score': normal_exam.score,
+            'exam_id': normal_exam.exam_id,
+        })
+    except Exception as e:
+        return Response(str(e.err_msg), status=400)
 
 
 @app.route('/api/normal_exam', methods=['POST'])
@@ -77,14 +79,14 @@ def create_normal_exam():
     score = data.get('score')
 
     try:
-        normal_exam = dao.create_normal_exam(exam_id, factor, score)
+        normal_exam = dao.create_normal_exam(exam_id, factor, float(score))
         return jsonify({
             'id': normal_exam.id,
             'score': normal_exam.score,
             'exam_id': normal_exam.exam_id,
         })
     except Exception as e:
-        return Response("{'msg': e}", status=400)
+        return Response(str(e.meesage), status=400)
 
 
 @app.route('/api/normal_exam/<id>', methods=['DELETE'])
@@ -100,12 +102,14 @@ def delete_normal_exam(id):
 def update_final_exam(id):
     data = request.json
     score = data.get('score')
-
-    exam = dao.update_final_exam(exam_id=id, score=score)
-    return jsonify({
-        'score': exam.final_exam.score,
-        'exam_id': exam.id,
-    })
+    try:
+        exam = dao.update_final_exam(exam_id=id, score=float(score))
+        return jsonify({
+            'score': exam.final_exam.score,
+            'exam_id': exam.id,
+        })
+    except Exception as e:
+        return Response(str(e.meesage), status=400)
 
 
 @app.route('/api/search_student', methods=['GET'])

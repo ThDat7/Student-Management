@@ -1,6 +1,8 @@
 from flask_login import current_user
 from sqlalchemy import func
 import cloudinary.uploader
+from wtforms import ValidationError
+
 from app.models import *
 from app import app
 import hashlib
@@ -35,15 +37,20 @@ def update_normal_exam(exam_id, id, score):
                            NormalExam.id.__eq__(id))
                    .first())
     if normal_exam:
-        normal_exam.score = score
-        db.session.commit()
-        return normal_exam
+        msg_error = None
+        if score < 0.0 or score > 10.0:
+            msg_error = "Điểm nhập không hợp lệ!!!"
+            raise Exception(msg_error)
+        else:
+            normal_exam.score = score
+            db.session.commit()
+            return normal_exam
 
     return None
 
 
 def create_normal_exam(exam_id, factor, score):
-    validate_exams_number_rule(exam_id, factor)
+    validate_exams_number_rule(exam_id, factor, float(score))
 
     normal_exam = NormalExam(exam_id=exam_id, factor=factor, score=score)
     db.session.add(normal_exam)
@@ -52,26 +59,30 @@ def create_normal_exam(exam_id, factor, score):
     return normal_exam
 
 
-def validate_exams_number_rule(exam_id, factor):
-    if exam_id is not None:
-        exam = db.session.query(Exam).filter(Exam.id.__eq__(exam_id)).first()
-        msg_error = None
+def validate_exams_number_rule(exam_id, factor, score):
+    msg_error = None
+    if score < 0.0 or score > 10.0:
+        msg_error = "Điểm nhập không hợp lệ!!!"
+        raise Exception(msg_error)
+    else:
+        if exam_id is not None:
+            exam = db.session.query(Exam).filter(Exam.id.__eq__(exam_id)).first()
 
-        len15p, len45p = 0, 0
-        if exam.normal_exams is not None:
-            for normal_exam in exam.normal_exams:
-                if normal_exam.factor == FactorEnum.I:
-                    len15p += 1
-                else:
-                    len45p += 1
+            len15p, len45p = 0, 0
+            if exam.normal_exams is not None:
+                for normal_exam in exam.normal_exams:
+                    if normal_exam.factor == FactorEnum.I:
+                        len15p += 1
+                    else:
+                        len45p += 1
 
-            if factor == 'I' and len15p >= 5:
-                msg_error = 'Số cột điểm 15p đang lớn hơn quy định'
-            elif factor == 'II' and len45p >= 3:
-                msg_error = 'Số cột điểm 45p đang lớn hơn quy định'
+                if factor == 'I' and len15p >= 5:
+                    msg_error = 'Số cột điểm 15p đang lớn hơn quy định!!!'
+                elif factor == 'II' and len45p >= 3:
+                    msg_error = 'Số cột điểm 45p đang lớn hơn quy định!!!'
 
-            if msg_error is not None:
-                raise Exception(msg_error)
+                if msg_error is not None:
+                    raise Exception(msg_error)
 
 
 def delete_normal_exam(id, exam_id):
@@ -94,6 +105,7 @@ def delete_normal_exam(id, exam_id):
 
 
 def update_final_exam(exam_id, score):
+    err_msg = None
     exam = (db.session.query(Exam)
             .join(Teach)
             .join(Teacher)
@@ -104,10 +116,14 @@ def update_final_exam(exam_id, score):
     if exam:
         if exam.final_exam is None:
             exam.final_exam = FinalExam(exam_id=exam.id)
-
-        exam.final_exam.score = score
-        db.session.commit()
-        return exam
+        msg_error = None
+        if score < 0.0 or score > 10.0:
+            msg_error = "Điểm nhập không hợp lệ!!!"
+            raise Exception(msg_error)
+        else:
+            exam.final_exam.score = score
+            db.session.commit()
+            return exam
 
     return None
 

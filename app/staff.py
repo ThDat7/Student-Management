@@ -2,6 +2,7 @@ import warnings
 
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import BaseView, expose
+from wtforms import ValidationError
 from wtforms.fields.simple import HiddenField
 
 from app import app, db, admin
@@ -81,7 +82,7 @@ class StudentView(AuthenticatedStaff):
             elif int_config.key == ConfigKeyEnum.MAX_AGE and age > int_config.value:
                 msg = 'Tuổi lớn hơn quy định'
         if msg is not None:
-            raise Exception(msg)
+            raise ValidationError(msg)
 
 
 admin.add_view(ClassroomView(Classroom, db.session, name='Quản Lý Lớp Học'))

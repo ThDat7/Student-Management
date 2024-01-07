@@ -9,4 +9,5 @@ class HomePageView(BaseView):
     def index(self):
         return redirect('/')
 
+
 admin.add_view(HomePageView(name='Home Page'))
