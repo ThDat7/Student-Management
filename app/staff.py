@@ -43,8 +43,8 @@ class ClassroomView(AuthenticatedStaff):
         from sqlalchemy import func
         n, cls = result
         for c in cls:
-            number_student = (self.session.query(func.count(student_classroom.c.student_id))
-                              .filter(student_classroom.c.classroom_id == c.id)).scalar()
+            number_student = (self.session.query(func.count(Student_ClassRoom.student_id))
+                              .filter(Student_ClassRoom.classroom_id == c.id)).scalar()
             c.student_count = number_student
         return result
 

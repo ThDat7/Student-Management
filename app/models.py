@@ -52,7 +52,6 @@ class User(db.Model, UserMixin):
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(100), nullable=False)
-
     last_name = Column(String(20), nullable=False)
     first_name = Column(String(20), nullable=False)
     dob = Column(DateTime, nullable=False)
@@ -118,12 +117,15 @@ class Classroom(db.Model):
     students = relationship('Student', secondary="student_classroom", backref=db.backref('classroom'))
     student_count = None
 
-    student_classroom = db.Table('student_classroom',
-                             Column("student_id", Integer, ForeignKey("student.id"), primary_key=True),
-                             Column("classroom_id", Integer, ForeignKey("classroom.id"), primary_key=True))
-
     def __str__(self):
         return str(self.grade.value) + 'A' + str(self.order)
+
+
+class Student_ClassRoom(db.Model):
+    __tablename__ = 'student_classroom'
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    student_id = Column(Integer, ForeignKey(Student.id), nullable=False)
+    classroom_id = Column(Integer, ForeignKey(Classroom.id), nullable=False)
 
 
 class Subject(db.Model):
