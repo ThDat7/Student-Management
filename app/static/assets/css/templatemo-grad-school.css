@@ -1441,6 +1441,19 @@ img.mfp-img {
 }
 
 
+/* Scores */
+section.scores {
+    background-image: url(../images/contact-bg.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #172238;
+    padding-bottom: 120px;
+}
+
+table#scores, table#student_info {
+    color: #fff
+}
+
 
 /* Contact */
 
