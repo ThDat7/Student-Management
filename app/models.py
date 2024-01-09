@@ -105,6 +105,7 @@ class Student(db.Model):
     sex = Column(Boolean, nullable=False)
     address = Column(String(255))
     email = Column(String(255))
+    phone_number = Column(String(20), nullable=False)
 
     def __str__(self):
         return self.last_name + ' ' + self.first_name

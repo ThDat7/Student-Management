@@ -56,7 +56,7 @@ class StudentView(AuthenticatedStaff):
     edit_modal = True
     details_modal = True
     create_modal = True
-    column_list = ['id', 'last_name', 'first_name', 'dob', 'sex', 'address', 'email', 'classroom']
+    column_list = ['id', 'last_name', 'first_name', 'dob', 'sex', 'address', 'email', 'phone_number', 'classroom']
     column_labels = {
         'id': 'STT',
         'last_name': 'Họ',
@@ -64,6 +64,7 @@ class StudentView(AuthenticatedStaff):
         'dob': 'Ngày sinh',
         'sex': 'Giới tính',
         'address': 'Địa chỉ',
+        'phone_number': 'Số điện thoại',
         'classroom': 'Lớp học'
     }
 

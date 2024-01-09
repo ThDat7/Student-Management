@@ -44,12 +44,12 @@ if __name__ == '__main__':
 
         #################### hoc sinh
         # Tạo học sinh
-        student1 = Student(last_name="Hoc", first_name="Sinh", dob=datetime.now(), sex=True, address="")
-        student2 = Student(last_name="Sinh", first_name="Vien", dob=datetime.now(), sex=False, address="")
-        student3 = Student(last_name="Thanh", first_name="Dat", dob=datetime.now(), sex=True, address="")
-        student4 = Student(last_name="Thanh", first_name="Hai", dob=datetime.now(), sex=True, address="")
-        student5 = Student(last_name="Minh", first_name="Hoang", dob=datetime.now(), sex=True, address="")
-        student6 = Student(last_name="ABC", first_name="XYZ", dob=datetime.now(), sex=True, address="")
+        student1 = Student(last_name="Hoc", first_name="Sinh", dob=datetime.now(), sex=True, address="", phone_number='0123')
+        student2 = Student(last_name="Sinh", first_name="Vien", dob=datetime.now(), sex=False, address="", phone_number='0124')
+        student3 = Student(last_name="Thanh", first_name="Dat", dob=datetime.now(), sex=True, address="", phone_number='0125')
+        student4 = Student(last_name="Thanh", first_name="Hai", dob=datetime.now(), sex=True, address="", phone_number='0126')
+        student5 = Student(last_name="Minh", first_name="Hoang", dob=datetime.now(), sex=True, address="", phone_number='0127')
+        student6 = Student(last_name="ABC", first_name="XYZ", dob=datetime.now(), sex=True, address="", phone_number='0128')
         db.session.add_all([student1, student2, student3, student4, student5, student6])
         db.session.commit()
 

@@ -11,6 +11,22 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/', methods=['post'])
+def search_student_by_phone():
+    err_msg = None
+    exam = None
+
+    kw = request.form['phone_key']
+    stu = dao.phone_student(kw)
+
+    if stu is not None:
+        exam = dao.exam_student(kw)
+    else:
+        err_msg = 'NO STUDENT FOUND'
+
+    return render_template('index.html', student=stu, exams=exam, key=kw, err_msg=err_msg)
+
+
 @app.route('/admin/login', methods=['post'])
 def admin_login():
     request.form.get('username')

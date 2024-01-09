@@ -1,5 +1,5 @@
 from flask_login import current_user
-from sqlalchemy import func
+from sqlalchemy import func, case
 import cloudinary.uploader
 from wtforms import ValidationError
 
@@ -280,3 +280,25 @@ def stats():
               .having(func.avg(NormalExam.score) >= 5.0, func.avg(FinalExam.score) >= 5.0)
               .all())
     return result
+
+
+def phone_student(kw):
+    return db.session.query(Student).filter(Student.phone_number.__eq__(kw)).first()
+
+
+def exam_student(kw):
+    student = phone_student(kw)
+
+    return (db.session.query(Exam.id.label('id_exam'), Subject.name.label('name_subject'),
+                             func.group_concat(case((NormalExam.factor == FactorEnum.I, NormalExam.score), else_=None))
+                             .label('s1'),
+                             func.group_concat(case((NormalExam.factor == FactorEnum.II, NormalExam.score), else_=None))
+                             .label('s2'),
+                             FinalExam.score.label('final_score'))
+            .join(Teach, Subject.id == Teach.subject_id, isouter=True)
+            .join(Exam, Teach.id == Exam.teach_id, isouter=True)
+            .join(FinalExam, Exam.id == FinalExam.exam_id, isouter=True)
+            .join(NormalExam, Exam.id == NormalExam.exam_id, isouter=True)
+            .filter(Exam.student_id == student.id)
+            .group_by(Exam.id, Subject.name, FinalExam.score)
+            .all())
