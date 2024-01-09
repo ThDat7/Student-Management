@@ -1,3 +1,5 @@
+import json
+
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import BaseView, expose
 from app import app, db, admin
@@ -59,7 +61,7 @@ class StudyStatsView(AuthenticatedAdminBaseView):
                       .filter(Classroom.year.__eq__(teach.classroom.year),
                               Subject.id.__eq__(teach.subject.id),
                               Teach.semester == teach.semester)
-                      .group_by(Classroom.year)).all()
+                      .group_by(Classroom.grade, Classroom.order)).all()
 
         data = {
             'details': [
@@ -110,6 +112,7 @@ class StudyStatsView(AuthenticatedAdminBaseView):
     @expose('/stats_detail/<id>')
     def stats_detail(self, id):
         data = self.get_detail(id)
+
         return self.render('admin/model/modals/stats_details.html', data=data)
 
 

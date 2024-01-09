@@ -1,4 +1,42 @@
 {% extends 'admin/master.html'%}
+
 {% block body %}
 <h1 class="text-center">BÁO CÁO THỐNG KÊ KẾT QUẢ HỌC TẬP</h1>
+
+<div class="row">
+    <div class="col-md-6 col-xs-12">
+
+    </div>
+    <div class="col-md-6 col-xs-12">
+        <canvas id="myChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('myChart');
+
+  label = ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange']
+  data = [12, 19, 3, 5, 2, 3]
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: label,
+      datasets: [{
+        label: 'Tỷ lệ đạt',
+        data: data,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
 {% endblock %}

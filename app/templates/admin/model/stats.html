@@ -1,103 +1,87 @@
 {% extends 'admin/master.html' %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% macro render_table(labels, cols, datas, is_list=False) -%}
-    <table class="table table-striped table-bordered table-hover model-list">
-        <thead>
-        <tr>
 
-            {% if is_list %}
-                <th class="">&nbsp;</th>
-            {% endif %}
+<table class="table table-striped table-bordered table-hover model-list">
+    <thead>
+    <tr>
+        {% if is_list %}
+        <th class="">&nbsp;</th>
+        {% endif %}
 
-            {% for label in labels %}
-                <th>
-                    {{ label }}
-                </th>
-            {% endfor %}
-        </tr>
-        </thead>
-        <tbody>
-        {% for data in datas %}
-            <tr>
-                {% if is_list %}
-                    <td>
-                        <a class="icon a-modals" data-target="#statsModal" title="Thống kê"
-                           href="{{ url_for('.stats_detail', id=data['id']) }}"
-                           data-toggle="modal">
-                            <span class="fa fa-bar-chart"></span>
-                        </a>
-                    </td>
-                {% endif %}
-                {% for col in cols %}
-                    <td>
-                        {{ data[col] }}
-                    </td>
-                {% endfor %}
-            </tr>
+        {% for label in labels %}
+        <th>
+            {{ label }}
+        </th>
         {% endfor %}
-        </tbody>
-    </table>
-    <div class="row">
-    <div class="col-md-7 col-xs-12">
-        <div>
-            <canvas id="myChart"></canvas>
-        </div>
-    </div>
-</div>
-<script>
-    {% for dt in datas %}
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Thống kê bên ngoài -->
+    {% for data in datas %}
+    <tr>
+        {% if is_list %}
+        <td>
+            <a class="icon a-modals" data-target="#statsModal" title="Thống kê"
+               href="{{ url_for('.stats_detail', id=data['id']) }}"
+               data-toggle="modal">
+                <span class="fa fa-bar-chart"></span>
+            </a>
+        </td>
+        {% endif %}
+        <!-- Thống kê chi tiết -->
         {% for col in cols %}
-            data.push({{dt[col]}})
+        <td>
+            {{ data[col] }}
+        </td>
         {% endfor %}
+    </tr>
     {% endfor %}
-    window.onload = function() {
-        const ctx = document.getElementById('myChart')
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-              labels: labels,
-              datasets: [{
-                label: '# of Votes',
-                data: data,
-                borderWidth: 1
-              }]
-            },
-            options: {
-              scales: {
-                y: {
-                  beginAtZero: true
-                }
-              }
-            }
-        });
-    }
-</script>
+    </tbody>
+</table>
+
+<!--<div class="row">-->
+<!--    <div class="col-md-7 col-xs-12">-->
+<!--        <div>-->
+<!--            <canvas id="myChart"></canvas>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--{% for dt in datas %}-->
+<!--            {% for col in cols %}-->
+<!--                data.push({{dt[col]}})-->
+<!--            {% endfor %}-->
+<!--        {% endfor %}-->
+
+<script src="{{ url_for('static', filename='assets/js/chart.js') }}"></script>
+
+
 {%- endmacro %}
 
 {% block body %}
-    {{ super() }}
+{{ super() }}
 
-    {{ render_table(labels=data.labels, cols=data.cols, datas=data.data, is_list=True) }}
+{{ render_table(labels=data.labels, cols=data.cols, datas=data.data, is_list=True) }}
 
-    <div class="modal fade" id="statsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-         aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content" style="background-color: white">
+<div class="modal fade" id="statsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content" style="background-color: white">
 
-            </div>
         </div>
     </div>
+</div>
 
 
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
 
-        $(".a-modals").click(function (event) {
-            var url = this.href
+    $(".a-modals").click(function (event) {
+        var url = this.href
 
-            fetch(url, {method: 'GET'})
-                .then(response => response.text())
-                .then(tables => $('.modal-content').html(tables))
-        });
-    </script>
+        fetch(url, {method: 'GET'})
+            .then(response => response.text())
+            .then(tables => $('.modal-content').html(tables))
+    });
+</script>
 {% endblock %}

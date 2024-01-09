@@ -85,7 +85,8 @@ if __name__ == '__main__':
         teach3 = Teach(teacher=teacher1, subject=subject1, classroom=classroom1, semester=SemesterEnum.II)
         teach2 = Teach(teacher=teacher1, subject=subject2, classroom=classroom2, semester=SemesterEnum.I)
         teach4 = Teach(teacher=teacher1, subject=subject2, classroom=classroom2, semester=SemesterEnum.II)
-        db.session.add_all([teach1, teach2, teach3, teach4])
+        teach5 = Teach(teacher=teacher1, subject=subject1, classroom=classroom2, semester=SemesterEnum.I)
+        db.session.add_all([teach1, teach2, teach3, teach4, teach5])
         db.session.commit()
 
         # Tạo kiem tra

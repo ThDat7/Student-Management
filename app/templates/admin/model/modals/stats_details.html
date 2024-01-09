@@ -19,7 +19,46 @@
         </tr>
         {% endfor %}
     </table>
-
-    {{ render_table(labels=data.stat_labels, cols=data.stat_cols, datas=data.stat_data) }}
+</div>
+<div class="row">
+    <div class="col-md-6 col-xs-12">
+        {{ render_table(labels=data.stat_labels, cols=data.stat_cols, datas=data.stat_data) }}
+    </div>
+    <div class="col-md-6 col-xs-12">
+        <canvas id="myChart"></canvas>
+    </div>
 </div>
 
+<script>
+    const ctx = document.getElementById('myChart');
+
+    let labels = ['10A1', '11A1']
+    let datas = [0.2, 0]
+
+    new Chart(ctx, {
+      'type': 'line',
+      'data': {
+        'labels': labels,
+        'datasets': [{
+          'label': 'Tỷ lệ đạt',
+          'data': datas,
+          'borderWidth': 1
+        }]
+      },
+      'options': {
+        scales: {
+           yAxes: [{
+            ticks: {
+                   min: 0,
+                   max: 100,
+                   callback: function(value){return value+ "%"}
+                },
+                        scaleLabel: {
+                   display: true,
+                   labelString: "Percentage"
+                }
+            }]
+        }
+        }
+    });
+</script>

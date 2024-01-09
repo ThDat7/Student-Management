@@ -20,6 +20,7 @@ class AuthenticatedStaff(ModelView):
 class ClassroomView(AuthenticatedStaff):
     column_display_pk = True
     can_view_details = True
+    form_excluded_columns = ('students')
     can_export = True
     edit_modal = True
     details_modal = True
