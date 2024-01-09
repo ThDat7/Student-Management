@@ -46,7 +46,7 @@ def update_normal_exam(exam_id, id, score):
 
 
 def create_normal_exam(exam_id, factor, score):
-    validate_exams_number_rule(exam_id, factor, score)
+    validate_exams_number_rule(exam_id, factor)
 
     normal_exam = NormalExam(exam_id=exam_id, factor=factor, score=score)
     db.session.add(normal_exam)
