@@ -78,6 +78,9 @@ class Teacher(db.Model):
     user_id = Column(Integer, ForeignKey('user.id'), unique=True, nullable=False)
     user = relationship('User')
 
+    def __str__(self):
+        return self.user.__str__()
+
 
 class Teach(db.Model):
     __tablename__ = 'teach'

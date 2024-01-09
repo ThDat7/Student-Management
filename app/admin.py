@@ -1,5 +1,3 @@
-import json
-
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import BaseView, expose
 from app import app, db, admin
@@ -91,7 +89,7 @@ class StudyStatsView(AuthenticatedAdminBaseView):
                          Teach.semester == teach.semester))
         for classroom in classrooms:
             stat = {
-                'classroom': classroom,
+                'classroom': classroom.__str__(),
                 'student_count': len(classroom.students),
                 'pass_num': None,
                 'pass_rate': None
@@ -112,7 +110,6 @@ class StudyStatsView(AuthenticatedAdminBaseView):
     @expose('/stats_detail/<id>')
     def stats_detail(self, id):
         data = self.get_detail(id)
-
         return self.render('admin/model/modals/stats_details.html', data=data)
 
 

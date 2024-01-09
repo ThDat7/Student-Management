@@ -9,14 +9,14 @@
 <div class="modal-body">
     <table class="table table-hover table-bordered searchable">
         {% for detail in data.details %}
-        <tr>
-            <td>
-                <b>{{ detail.label }}</b>
-            </td>
-            <td>
-                {{ detail.value }}
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    <b>{{ detail.label }}</b>
+                </td>
+                <td>
+                    {{ detail.value }}
+                </td>
+            </tr>
         {% endfor %}
     </table>
 </div>
@@ -30,35 +30,78 @@
 </div>
 
 <script>
-    const ctx = document.getElementById('myChart');
+    let data = {{ data.stat_data | safe }}
+    let class_data = data.map(e => e.classroom)
+    let pass_num_data = data.map(e => e.pass_num)
+    let fail_num_data = data.map(e => e.student_count - e.pass_num)
 
-    let labels = ['10A1', '11A1']
-    let datas = [0.2, 0]
+    Chart.register(ChartjsPluginStacked100.default)
 
-    new Chart(ctx, {
-      'type': 'line',
-      'data': {
-        'labels': labels,
-        'datasets': [{
-          'label': 'Tỷ lệ đạt',
-          'data': datas,
-          'borderWidth': 1
-        }]
-      },
-      'options': {
-        scales: {
-           yAxes: [{
-            ticks: {
-                   min: 0,
-                   max: 100,
-                   callback: function(value){return value+ "%"}
-                },
-                        scaleLabel: {
-                   display: true,
-                   labelString: "Percentage"
+    new Chart('myChart', {
+        type: 'bar',
+        data: {
+            datasets: [{
+                label: 'Học sinh đạt',
+                data: pass_num_data,
+                backgroundColor: [
+                    'rgba(255, 26, 104, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(0, 0, 0, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 26, 104, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(0, 0, 0, 1)'
+                ],
+                borderWidth: 1
+            },
+                {
+                    label: 'Học sinh rớt',
+                    data: fail_num_data,
+                    backgroundColor: [
+                        'rgba(0, 0, 0, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(0, 0, 0, 1)'
+                    ],
+                    borderWidth: 1
+                }],
+            labels: class_data
+        },
+        options: {
+            plugins: {
+                stacked100: {
+                    enable: true,
+                    precision: 3
                 }
-            }]
-        }
+            },
+            scales: {
+                y: {
+                    ticks: {
+                        min: 0,
+                        max: 100,
+                        callback: function (value) {
+                            return value + "%"
+                        }
+                    },
+                    grid: {
+                        display: false,
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Percentage"
+                    },
+                    max: 100
+                }
+            }
         }
     });
 </script>

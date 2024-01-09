@@ -1,8 +1,6 @@
 from flask_login import current_user
 from sqlalchemy import func, case
 import cloudinary.uploader
-from wtforms import ValidationError
-
 from app.models import *
 from app import app
 import hashlib
@@ -39,7 +37,6 @@ def update_normal_exam(exam_id, id, score):
     if normal_exam:
         normal_exam.score = score
         db.session.commit()
-
         return normal_exam
 
     return None
@@ -56,9 +53,10 @@ def create_normal_exam(exam_id, factor, score):
 
 
 def validate_exams_number_rule(exam_id, factor):
-    msg_error = None
     if exam_id is not None:
         exam = db.session.query(Exam).filter(Exam.id.__eq__(exam_id)).first()
+        msg_error = None
+
         len15p, len45p = 0, 0
         if exam.normal_exams is not None:
             for normal_exam in exam.normal_exams:
@@ -109,69 +107,12 @@ def update_final_exam(exam_id, score):
 
         exam.final_exam.score = score
         db.session.commit()
-
         return exam
+
     return None
 
 
 def get_teach_data(teach_id):
-    teach = ((db.session.query(Teach)
-              .filter(Teach.id.__eq__(teach_id)))
-             .first())
-
-    classroom = teach.classroom
-
-    students = classroom.students
-
-    data = {
-        'teach_id': teach_id,
-        'year': classroom.year,
-        'semester': teach.semester.value,
-        'classroom': classroom.__str__(),
-        'subject': teach.subject,
-        'students': []
-    }
-
-    for student in students:
-        student_data = {
-            'id': student.id,
-            'last_name': student.last_name,
-            'first_name': student.first_name,
-            'exam': None
-        }
-
-        exam = (db.session.query(Exam)
-                .filter(Exam.student_id.__eq__(student.id),
-                        Exam.teach_id.__eq__(teach_id))).first()
-
-        exam_data = None
-        if exam:
-            exam_data = {
-                'id': exam.id,
-                'normal_exams': [],
-                'final_exam': None
-            }
-
-            if exam.final_exam is not None:
-                exam_data['final_exam'] = {
-                    'score': exam.final_exam.score
-                }
-
-            for normal_exam in exam.normal_exams:
-                normal_exam_data = {
-                    'id': normal_exam.id,
-                    'factor': normal_exam.factor,
-                    'score': normal_exam.score
-                }
-                exam_data['normal_exams'].append(normal_exam_data)
-
-        student_data['exam'] = exam_data
-        data['students'].append(student_data)
-
-    return data
-
-
-def get_score_average_stats(teach_id):
     teach = ((db.session.query(Teach)
               .filter(Teach.id.__eq__(teach_id)))
              .first())
@@ -258,28 +199,6 @@ def upload_image(avatar, id):
 
     db.session.add(user)
     db.session.commit()
-
-
-def stats():
-    from sqlalchemy import func
-
-    result = (db.session.query(
-        Subject.name,
-        Teach.semester,
-        Classroom.year,
-        Teach.classroom,
-        func.count(Classroom.students)
-        (func.sum(NormalExam.score) / func.count(NormalExam.id)).label('avg_normal_score'),
-        (func.sum(FinalExam.score) / func.count(FinalExam.exam_id)).label('avg_final_score'))
-              .join(Teach, Subject.id == Teach.subject_id)
-              .join(Classroom, Teach.classroom_id == Classroom.id)
-              .join(Exam, Teach.id == Exam.id)
-              .join(FinalExam, Exam.id == FinalExam.exam_id)
-              .join(NormalExam, Exam.id == NormalExam.exam_id)
-              .group_by(Subject.name, Teach.semester, Classroom.year, Teach.classroom)
-              .having(func.avg(NormalExam.score) >= 5.0, func.avg(FinalExam.score) >= 5.0)
-              .all())
-    return result
 
 
 def phone_student(kw):

@@ -181,6 +181,6 @@ if __name__ == '__main__':
 
     with app.app_context():
         init_config_defaults()
-        # print(dao.stats())
+
     app.run(debug=not (hasattr(sys, 'gettrace') and sys.gettrace() is not None))
     # app.run()

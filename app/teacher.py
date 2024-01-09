@@ -35,7 +35,6 @@ class TeachView(AuthenticatedTeacherModelView):
     can_delete = False
     can_create = False
 
-    list_template = 'admin/model/teach_list.html'
     edit_modal_template = 'admin/model/modals/teach_edit.html'
 
     def get_one(self, id):
