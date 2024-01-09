@@ -20,7 +20,7 @@
             {% if current_user.is_authenticated %}
             <li><img src="{{current_user.avatar}}" class="rounded" width="50" height="50"/>
                 <a href="/admin" class="btn btn-info">
-                Chào {{current_user.first_name}}</a>
+                Chào {{current_user}}</a>
             </li>
             {% else %}
             <li><a href="/admin" class="btn btn-info">Login</a></li>

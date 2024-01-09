@@ -59,9 +59,9 @@ def create_exam():
 def update_normal_exam(id):
     data = request.json
     exam_id = data.get('exam_id')
-    score = data.get('score')
+    score = float(data.get('score'))
     try:
-        normal_exam = dao.update_normal_exam(exam_id, id, float(score))
+        normal_exam = dao.update_normal_exam(exam_id=exam_id, id=id, score=score)
         return jsonify({
             'id': normal_exam.id,
             'score': normal_exam.score,
@@ -76,10 +76,10 @@ def create_normal_exam():
     data = request.json
     exam_id = data.get('exam_id')
     factor = data.get('factor')
-    score = data.get('score')
+    score = float(data.get('score'))
 
     try:
-        normal_exam = dao.create_normal_exam(exam_id, factor, float(score))
+        normal_exam = dao.create_normal_exam(exam_id=exam_id, factor=factor, score=score)
         return jsonify({
             'id': normal_exam.id,
             'score': normal_exam.score,
@@ -101,9 +101,9 @@ def delete_normal_exam(id):
 @app.route('/api/final_exam/<id>', methods=['POST'])
 def update_final_exam(id):
     data = request.json
-    score = data.get('score')
+    score = float(data.get('score'))
     try:
-        exam = dao.update_final_exam(exam_id=id, score=float(score))
+        exam = dao.update_final_exam(exam_id=id, score=score)
         return jsonify({
             'score': exam.final_exam.score,
             'exam_id': exam.id,
@@ -165,6 +165,6 @@ if __name__ == '__main__':
 
     with app.app_context():
         init_config_defaults()
-
+        # print(dao.stats())
     app.run(debug=not (hasattr(sys, 'gettrace') and sys.gettrace() is not None))
     # app.run()

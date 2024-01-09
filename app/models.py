@@ -1,7 +1,9 @@
 from datetime import datetime
-
+import sqlalchemy as sa
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, Enum, Boolean, DateTime
 from sqlalchemy.orm import relationship
+from sqlalchemy.util.preloaded import orm
+
 from app import db, app
 from flask_login import UserMixin
 import enum
@@ -65,6 +67,9 @@ class User(db.Model, UserMixin):
 
     role = Column(Enum(RoleEnum), ForeignKey('role.name'), nullable=False)
 
+    def __str__(self):
+        return self.last_name + ' ' + self.first_name
+
 
 class Teacher(db.Model):
     __tablename__ = 'teacher'
@@ -74,7 +79,7 @@ class Teacher(db.Model):
     user = relationship('User')
 
     def __str__(self):
-        return self.user.last_name + ' ' + self.user.first_name
+        return self.last_name + ' ' + self.first_name
 
 
 class Teach(db.Model):
@@ -157,14 +162,26 @@ class NormalExam(db.Model):
     exam = relationship('Exam', backref='normal_exams')
 
     factor = Column(Enum(FactorEnum), nullable=False)
-    score = Column(Float, nullable=False)
+    score = sa.Column(sa.Float, sa.CheckConstraint('score >= 0.0 AND score <= 10.0'), nullable=False)
+
+    @orm.validates('score')
+    def validate_score(self, key, value):
+        if 0.0 > value or value > 10.0:
+            raise Exception(f'Điểm {value} nhập vào không hợp lệ')
+        return value
 
 
 class FinalExam(db.Model):
     exam_id = Column(Integer, ForeignKey('exam.id'), primary_key=True)
     exam = relationship('Exam', back_populates='final_exam')
 
-    score = Column(Float, nullable=False)
+    score = sa.Column(sa.Float, sa.CheckConstraint('score >= 0.0 AND score <= 10.0'), nullable=False)
+
+    @orm.validates('score')
+    def validate_score(self, key, value):
+        if not 0 <= value <= 10:
+            raise Exception(f'Điểm {value} nhập vào không hợp lệ')
+        return value
 
 
 class Config(db.Model):

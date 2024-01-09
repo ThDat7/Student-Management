@@ -12,53 +12,54 @@
     </thead>
     <tbody>
     {% for student in model.students %}
-        <tr class="exam" data-exam-id="{{ student.exam.id }}" data-student-id="{{ student.id }}">
-            <td>{{ loop.index }}</td>
-            <td>{{ student.last_name }}</td>
-            <td>{{ student.first_name }}</td>
+    <tr class="exam" data-exam-id="{{ student.exam.id }}" data-student-id="{{ student.id }}">
+        <td>{{ loop.index }}</td>
+        <td>{{ student.last_name }}</td>
+        <td>{{ student.first_name }}</td>
 
-            <td data-exam-type="normal">
-                {% for d in student.exam.normal_exams %}
-                    {% if d.factor.value == 1 %}
-                        <button type="button" class="btn btn-secondary" data-toggle="modal"
-                                data-target="#exam-modal"
-                                data-id="{{ d.id }}">
-                            {{ d.score }}
-                        </button>
-                    {% endif %}
-                {% endfor %}
+        <td data-exam-type="normal">
+            {% for d in student.exam.normal_exams %}
+            {% if d.factor.value == 1 %}
+            <button type="button" class="btn btn-secondary" data-toggle="modal"
+                    data-target="#exam-modal"
+                    data-id="{{ d.id }}">
+                {{ d.score }}
+            </button>
+            {% endif %}
+            {% endfor %}
 
-                <button type="button" class="btn btn-success add" data-toggle="modal"
-                        data-target="#exam-modal"
-                        data-factor="I">
-                    Thêm
-                </button>
-            </td>
-            <td data-exam-type="normal">
-                {% for d in student.exam.normal_exams %}
-                    {% if d.factor.value == 2 %}
-                        <button type="button" class="btn btn-secondary" data-toggle="modal"
-                                data-target="#exam-modal"
-                                data-id="{{ d.id }}">
-                            {{ d.score }}
-                        </button>
-                    {% endif %}
-                {% endfor %}
+            <button type="button" class="btn btn-success add" data-toggle="modal"
+                    data-target="#exam-modal"
+                    data-factor="I">
+                Thêm
+            </button>
+        </td>
+        <td data-exam-type="normal">
+            {% for d in student.exam.normal_exams %}
+            {% if d.factor.value == 2 %}
+            <button type="button" class="btn btn-secondary" data-toggle="modal"
+                    data-target="#exam-modal"
+                    data-id="{{ d.id }}">
+                {{ d.score }}
+            </button>
+            {% endif %}
+            {% endfor %}
 
-                <button type="button" class="btn btn-success add" data-toggle="modal"
-                        data-target="#exam-modal"
-                        data-factor="II">
-                    Thêm
-                </button>
-            </td>
+            <button type="button" class="btn btn-success add" data-toggle="modal"
+                    data-target="#exam-modal"
+                    data-factor="II">
+                Thêm
+            </button>
+        </td>
 
-            <td data-exam-type="final">
-                <button style="width: 47px; height: 36px" type="button" class="btn btn-secondary" data-toggle="modal"
-                        data-target="#exam-modal">
-                    {% if student.exam is not none and student.exam.final_exam is not none %} {{ student.exam.final_exam.score }} {% endif %}
-                </button>
-            </td>
-        </tr>
+        <td data-exam-type="final">
+            <button style="width: 47px; height: 36px" type="button" class="btn btn-secondary" data-toggle="modal"
+                    data-target="#exam-modal">
+                {% if student.exam is not none and student.exam.final_exam is not none %} {{
+                student.exam.final_exam.score }} {% endif %}
+            </button>
+        </td>
+    </tr>
     {% endfor %}
     </tbody>
 </table>
@@ -72,6 +73,7 @@
             </div>
             <div class="modal-body">
                 <input type="number" step="0.01"/>
+                <span class="msg text-danger"></span>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary submit">Save changes</button>
@@ -96,23 +98,24 @@
         submitBtn.off("click")
         deleteBtn.off("click")
         modal.find('.modal-body input').val('')
+         $('span.msg').text('')
 
         if (button.parent().data('exam-type') == 'normal') {
             if (id) {
                 modal.find('.modal-body input').val(score)
                 deleteBtn.css('display', 'block')
-                submitBtn.on('click', ajaxUpdateNormalExam)
+                submitBtn.on('click', async () => {await submitBtnClickHandler(ajaxUpdateNormalExam)})
                 deleteBtn.on('click', ajaxDeleteNormalExam)
             } else {
                 deleteBtn.css('display', 'none')
-                submitBtn.on('click', ajaxCreateNormalExam)
+                submitBtn.on('click', async () => {await submitBtnClickHandler(ajaxCreateNormalExam)})
             }
         } else if (button.parent().data('exam-type') == 'final') {
             if (score)
                 modal.find('.modal-body input').val(score)
 
             deleteBtn.css('display', 'none')
-            submitBtn.on('click', ajaxUpdateFinalExam)
+            submitBtn.on('click', async () => {await submitBtnClickHandler(ajaxUpdateFinalExam)})
         }
 
         function ajaxSuccess(data, method) {
@@ -136,6 +139,13 @@
                 button.remove()
             }
 
+        }
+
+        async function submitBtnClickHandler(handler) {
+            score = modal.find('.modal-body input').val()
+            if (score < 0 || score > 10)
+                $('span.msg').text('Diem khong hop le')
+            else await handler()
         }
 
         async function ajaxCreateExam() {
@@ -201,7 +211,7 @@
         }
 
         function ajaxUpdateNormalExam() {
-            score = modal.find('.modal-body input').val()
+         score = modal.find('.modal-body input').val()
             $.ajax({
                 type: 'PUT',
                 url: `/api/normal_exam/${id}`,
@@ -232,4 +242,5 @@
             })
         }
     })
+
 </script>

@@ -43,6 +43,7 @@ class TeachView(AuthenticatedTeacherModelView):
 
 
 class AverageScoreStatsView(AuthenticatedTeacherBaseView):
+
     def __init__(self, session, name):
         self.session = session
         super(AverageScoreStatsView, self).__init__(name)
