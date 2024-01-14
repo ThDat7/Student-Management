@@ -202,10 +202,22 @@ def upload_image(avatar, id):
 
 
 def phone_student(kw):
-    return db.session.query(Student).filter(Student.phone_number.__eq__(kw)).first()
+    data = (db.session.query(Student.id,
+                             Student.first_name,
+                             Student.last_name,
+                             Student.dob,
+                             Student.sex,
+                             Classroom)
+            .join(Student_ClassRoom, Student.id == Student_ClassRoom.student_id)
+            .join(Classroom, Student_ClassRoom.classroom_id == Classroom.id)
+            .filter(Student.phone_number.__eq__(kw))
+            .first())
+
+    id, first_name, last_name, dob, sex, classroom = data
+    return  {'id': id, 'fullname': f'{last_name} {first_name}', 'dob': dob, 'sex': sex, 'classroom': classroom.__str__()}
 
 
-def exam_student(kw):
+def score_student_one(kw):
     student = phone_student(kw)
 
     return (db.session.query(Exam.id.label('id_exam'), Subject.name.label('name_subject'),
@@ -218,6 +230,24 @@ def exam_student(kw):
             .join(Exam, Teach.id == Exam.teach_id, isouter=True)
             .join(FinalExam, Exam.id == FinalExam.exam_id, isouter=True)
             .join(NormalExam, Exam.id == NormalExam.exam_id, isouter=True)
-            .filter(Exam.student_id == student.id)
+            .filter(Exam.student_id == student['id'], Teach.semester == SemesterEnum.I)
+            .group_by(Exam.id, Subject.name, FinalExam.score)
+            .all())
+
+
+def score_student_two(kw):
+    student = phone_student(kw)
+
+    return (db.session.query(Exam.id.label('id_exam'), Subject.name.label('name_subject'),
+                             func.group_concat(case((NormalExam.factor == FactorEnum.I, NormalExam.score), else_=None))
+                             .label('s1'),
+                             func.group_concat(case((NormalExam.factor == FactorEnum.II, NormalExam.score), else_=None))
+                             .label('s2'),
+                             FinalExam.score.label('final_score'))
+            .join(Teach, Subject.id == Teach.subject_id, isouter=True)
+            .join(Exam, Teach.id == Exam.teach_id, isouter=True)
+            .join(FinalExam, Exam.id == FinalExam.exam_id, isouter=True)
+            .join(NormalExam, Exam.id == NormalExam.exam_id, isouter=True)
+            .filter(Exam.student_id == student['id'], Teach.semester == SemesterEnum.II)
             .group_by(Exam.id, Subject.name, FinalExam.score)
             .all())

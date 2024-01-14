@@ -14,17 +14,18 @@ def index():
 @app.route('/', methods=['post'])
 def search_student_by_phone():
     err_msg = None
-    exam = None
+    score_1 = score_2 = None
 
     kw = request.form['phone_key']
     stu = dao.phone_student(kw)
 
     if stu is not None:
-        exam = dao.exam_student(kw)
+        score_1 = dao.score_student_one(kw)
+        score_2 = dao.score_student_two(kw)
     else:
         err_msg = 'NO STUDENT FOUND'
 
-    return render_template('index.html', student=stu, exams=exam, key=kw, err_msg=err_msg)
+    return render_template('index.html', student=stu, scores_1=score_1, scores_2=score_2, key=kw, err_msg=err_msg)
 
 
 @app.route('/admin/login', methods=['post'])

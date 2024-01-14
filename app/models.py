@@ -19,7 +19,7 @@ class RoleEnum(enum.Enum):
 class GradeEnum(enum.Enum):
     TENTH = 10
     ELEVENTH = 11
-    TWELFTH = 12
+    TWELVETH = 12
 
     def __str__(self):
         return self.value
@@ -105,7 +105,7 @@ class Student(db.Model):
     sex = Column(Boolean, nullable=False)
     address = Column(String(255))
     email = Column(String(255))
-    phone_number = Column(String(20), nullable=False)
+    phone_number = Column(String(20), nullable=False, unique=True)
 
     def __str__(self):
         return self.last_name + ' ' + self.first_name

@@ -17,7 +17,8 @@
                                    id="example-search-input">
                         </div>
                         <button class="btn btn-primary rounded-pill ml-2" type="submit">
-                            Search</button>
+                            Search
+                        </button>
                     </form>
                 </div>
                 {% if student %}
@@ -28,12 +29,13 @@
                             <th>Full Name</th>
                             <th>DOB</th>
                             <th>Sex</th>
+                            <th>Classroom</th>
                         </tr>
                         </thead>
                         <!--Thông tin học sinh dựa trên số điện thoại -->
                         <tbody>
                         <tr>
-                            <td>{{ student.last_name }} {{ student.first_name }}</td>
+                            <td>{{ student.fullname }}</td>
                             <td>{{ (student.dob).strftime('%d/%m/%Y') }}</td>
                             <td>
                                 {% if student.sex == True %}
@@ -42,6 +44,7 @@
                                 Female
                                 {% endif %}
                             </td>
+                            <td>{{ student.classroom }}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -50,7 +53,15 @@
                     <table class="table table-bordered text-center" id="scores">
                         <thead>
                         <tr>
-                            <th>Subject</th>
+                            <th rowspan="2" class="align-middle">Subject</th>
+                            <th colspan="3">Semester I</th>
+                            <th colspan="3">Semester II</th>
+                        </tr>
+                        <tr>
+                            <th>S1</th>
+                            <th>S2</th>
+                            <th>Final</th>
+
                             <th>S1</th>
                             <th>S2</th>
                             <th>Final</th>
@@ -58,12 +69,46 @@
                         </thead>
                         <!-- Thông tin điểm các môn học của học sinh dựa trên số điện thoại -->
                         <tbody>
-                        {% for e in exams %}
+                        {% for e in scores_1 %}
                         <tr>
                             <td>{{ e.name_subject }}</td>
-                            <td>{{ e.s1.replace(',', '︎ ︎ ︎ ︎︎ ︎ ︎') }}</td>
-                            <td>{{ e.s2 }}</td>
+
+                            <td>
+                                {% if e.s1 == None %}
+                                None
+                                {% else %}
+                                {{ e.s1.replace(',', '︎ ︎ ︎ ︎︎ ︎ ︎') }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if e.s2 == None %}
+                                None
+                                {% else %}
+                                {{ e.s2 }}
+                                {% endif %}
+                            </td>
                             <td>{{ e.final_score }}</td>
+
+                            {% for e2 in scores_2 %}
+                            {% if e2.name_subject == e.name_subject %}
+                            <td>
+                                {% if e2.s1 == None %}
+                                None
+                                {% else %}
+                                {{ e2.s1.replace(',', '︎ ︎ ︎ ︎︎ ︎ ︎') }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if e2.s2 == None %}
+                                None
+                                {% else %}
+                                {{ e2.s2 }}
+                                {% endif %}
+                            </td>
+                            <td>{{ e2.final_score }}</td>
+                            {% endif %}
+                            {% endfor %}
+
                         </tr>
                         {% endfor %}
                         </tbody>
