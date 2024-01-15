@@ -20,11 +20,11 @@ if __name__ == '__main__':
         # Tạo người dùng
         admin1 = User(username="admin1", password=str(hashlib.md5('123'.encode('utf-8')).hexdigest()),
                       last_name="Trịnh Thanh",
-                      first_name="Hải", dob='2003-05-05 00:00:00', sex=True, email="hai@example.com",
+                      first_name="Hải", dob='2003-05-05 00:00:00', sex=SexEnum.Nam.name, email="hai@example.com",
                       role=admin_role.name)
         admin2 = User(username="admin2", password=str(hashlib.md5('123'.encode('utf-8')).hexdigest()),
                       last_name="Nguyễn Thành",
-                      first_name="Đạt", dob='2003-05-06 00:00:00', sex=True, email="dat@example.com",
+                      first_name="Đạt", dob='2003-05-06 00:00:00', sex=SexEnum.Nam.name, email="dat@example.com",
                       role=admin_role.name)
         db.session.add_all([admin1, admin2])
         db.session.commit()
@@ -34,27 +34,27 @@ if __name__ == '__main__':
         # Giáo viên 1 dạy toán khối 11 và 12
         giao_vien_1 = User(username="gv1", password=str(hashlib.md5('123'.encode('utf-8')).hexdigest()),
                            last_name="Nguyễn",
-                           first_name="B", dob='1995-12-02 00:00:00', sex=False,
+                           first_name="B", dob='1995-12-02 00:00:00', sex=SexEnum.Nữ.name,
                            email="giaovien1@example.com", role=teacher_role.name)
         # Giáo viên 2 dạy lịch sử khối 10 và 11
         giao_vien_2 = User(username="gv2", password=str(hashlib.md5('123'.encode('utf-8')).hexdigest()),
                            last_name="Đào",
-                           first_name="Q", dob='1990-11-30 00:00:00', sex=True,
+                           first_name="Q", dob='1990-11-30 00:00:00', sex=SexEnum.Nam.name,
                            email="giaovien2@example.com", role=teacher_role.name)
         # Giáo viên 3 dạy tiếng anh khối 12
         giao_vien_3 = User(username="gv3", password=str(hashlib.md5('123'.encode('utf-8')).hexdigest()),
                            last_name="Lê",
-                           first_name="H", dob='1997-10-03 00:00:00', sex=False,
+                           first_name="H", dob='1997-10-03 00:00:00', sex=SexEnum.Nữ.name,
                            email="giaovien3@example.com", role=teacher_role.name)
         # Giáo viên 4 dạy toán khối 10
         giao_vien_4 = User(username="gv4", password=str(hashlib.md5('123'.encode('utf-8')).hexdigest()),
                            last_name="Phan",
-                           first_name="M", dob='1997-11-03 00:00:00', sex=True,
+                           first_name="M", dob='1997-11-03 00:00:00', sex=SexEnum.Nam.name,
                            email="giaovien4@example.com", role=teacher_role.name)
 
         nhan_vien1 = User(username="nv1", password=str(hashlib.md5('123'.encode('utf-8')).hexdigest()),
                           last_name="Lê Trương Minh",
-                          first_name="Hoàng", dob='2003-11-01 00:00:00', sex=True,
+                          first_name="Hoàng", dob='2003-11-01 00:00:00', sex=SexEnum.Nam.name,
                           email="nhanvien@example.com", role=staff_role.name)
         db.session.add_all([giao_vien_1, giao_vien_2, giao_vien_3, giao_vien_4, nhan_vien1])
         db.session.commit()
@@ -73,152 +73,152 @@ if __name__ == '__main__':
 
         # Khối 10
         # Học sinh lớp 10A1
-        student_1_10a1 = Student(last_name="Nguyễn Văn", first_name="A", dob='2003-01-01 00:00:00', sex=True,
-                                 address="",
+        student_1_10a1 = Student(last_name="Nguyễn Văn", first_name="A", dob='2003-01-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='0121')
-        student_2_10a1 = Student(last_name="Nguyễn Văn", first_name="B", dob='2003-02-01 00:00:00', sex=True,
-                                 address="",
+        student_2_10a1 = Student(last_name="Nguyễn Văn", first_name="B", dob='2003-02-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='0122')
-        student_3_10a1 = Student(last_name="Trần Thị", first_name="C", dob='2003-03-01 00:00:00', sex=False,
-                                 address="",
+        student_3_10a1 = Student(last_name="Trần Thị", first_name="C", dob='2003-03-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='0123')
-        student_4_10a1 = Student(last_name="Lê Thị", first_name="D", dob='2003-04-01 00:00:00', sex=False,
-                                 address="",
+        student_4_10a1 = Student(last_name="Lê Thị", first_name="D", dob='2003-04-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='0124')
-        student_5_10a1 = Student(last_name="Lê Trí", first_name="E", dob='2003-05-01 00:00:00', sex=True,
-                                 address="",
+        student_5_10a1 = Student(last_name="Lê Trí", first_name="E", dob='2003-05-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='0125')
         # Học sinh lớp 10A2
-        student_1_10a2 = Student(last_name="Huỳnh Tấn", first_name="P", dob='2003-06-01 00:00:00', sex=True,
-                                 address="",
+        student_1_10a2 = Student(last_name="Huỳnh Tấn", first_name="P", dob='2003-06-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='0126')
-        student_2_10a2 = Student(last_name="Trần Minh", first_name="L", dob='2003-07-01 00:00:00', sex=True,
-                                 address="",
+        student_2_10a2 = Student(last_name="Trần Minh", first_name="L", dob='2003-07-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='0127')
-        student_3_10a2 = Student(last_name="Trần", first_name="M", dob='2003-08-01 00:00:00', sex=False,
-                                 address="",
+        student_3_10a2 = Student(last_name="Trần", first_name="M", dob='2003-08-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='0128')
-        student_4_10a2 = Student(last_name="Lê Thị", first_name="N", dob='2003-09-01 00:00:00', sex=False,
-                                 address="",
+        student_4_10a2 = Student(last_name="Lê Thị", first_name="N", dob='2003-09-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='0129')
-        student_5_10a2 = Student(last_name="Lê Trí", first_name="O", dob='2003-10-01 00:00:00', sex=True,
-                                 address="",
+        student_5_10a2 = Student(last_name="Lê Trí", first_name="O", dob='2003-10-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='0120')
         # Học sinh lớp 10A3
-        student_1_10a3 = Student(last_name="Huỳnh Tấn", first_name="Q", dob='2003-01-01 00:00:00', sex=True,
-                                 address="",
+        student_1_10a3 = Student(last_name="Huỳnh Tấn", first_name="Q", dob='2003-01-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='0111')
-        student_2_10a3 = Student(last_name="Trần Minh", first_name="S", dob='2003-02-01 00:00:00', sex=True,
-                                 address="",
+        student_2_10a3 = Student(last_name="Trần Minh", first_name="S", dob='2003-02-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='0222')
-        student_3_10a3 = Student(last_name="Trần", first_name="T", dob='2003-03-01 00:00:00', sex=False,
-                                 address="",
+        student_3_10a3 = Student(last_name="Trần", first_name="T", dob='2003-03-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='0333')
-        student_4_10a3 = Student(last_name="Lê Thị", first_name="Y", dob='2003-04-01 00:00:00', sex=False,
-                                 address="",
+        student_4_10a3 = Student(last_name="Lê Thị", first_name="Y", dob='2003-04-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='0444')
-        student_5_10a3 = Student(last_name="Lê Trí", first_name="A", dob='2003-05-01 00:00:00', sex=True,
-                                 address="",
+        student_5_10a3 = Student(last_name="Lê Trí", first_name="A", dob='2003-05-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='0555')
 
         # Khối 11
         # Học sinh lớp 11A1
-        student_1_11a1 = Student(last_name="Nguyễn Văn", first_name="A", dob='2002-01-01 00:00:00', sex=True,
-                                 address="",
+        student_1_11a1 = Student(last_name="Nguyễn Văn", first_name="A", dob='2002-01-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='5555')
-        student_2_11a1 = Student(last_name="Nguyễn Văn", first_name="B", dob='2002-02-01 00:00:00', sex=True,
-                                 address="",
+        student_2_11a1 = Student(last_name="Nguyễn Văn", first_name="B", dob='2002-02-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='6666')
-        student_3_11a1 = Student(last_name="Trần Thị", first_name="C", dob='2002-03-01 00:00:00', sex=False,
-                                 address="",
+        student_3_11a1 = Student(last_name="Trần Thị", first_name="C", dob='2002-03-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='7777')
-        student_4_11a1 = Student(last_name="Lê Thị", first_name="D", dob='2002-04-01 00:00:00', sex=False,
-                                 address="",
+        student_4_11a1 = Student(last_name="Lê Thị", first_name="D", dob='2002-04-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='8888')
-        student_5_11a1 = Student(last_name="Lê Trí", first_name="E", dob='2002-05-01 00:00:00', sex=True,
-                                 address="",
+        student_5_11a1 = Student(last_name="Lê Trí", first_name="E", dob='2002-05-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='9999')
         # Học sinh lớp 11A2
-        student_1_11a2 = Student(last_name="Huỳnh Tấn", first_name="P", dob='2002-06-01 00:00:00', sex=True,
-                                 address="",
+        student_1_11a2 = Student(last_name="Huỳnh Tấn", first_name="P", dob='2002-06-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='1000')
-        student_2_11a2 = Student(last_name="Trần Minh", first_name="L", dob='2002-07-01 00:00:00', sex=True,
-                                 address="",
+        student_2_11a2 = Student(last_name="Trần Minh", first_name="L", dob='2002-07-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='1001')
-        student_3_11a2 = Student(last_name="Trần", first_name="M", dob='2002-08-01 00:00:00', sex=False,
-                                 address="",
+        student_3_11a2 = Student(last_name="Trần", first_name="M", dob='2002-08-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='1002')
-        student_4_11a2 = Student(last_name="Lê Thị", first_name="N", dob='2002-09-01 00:00:00', sex=False,
-                                 address="",
+        student_4_11a2 = Student(last_name="Lê Thị", first_name="N", dob='2002-09-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='1003')
-        student_5_11a2 = Student(last_name="Lê Trí", first_name="O", dob='2002-10-01 00:00:00', sex=True,
-                                 address="",
+        student_5_11a2 = Student(last_name="Lê Trí", first_name="O", dob='2002-10-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='1004')
         # Học sinh lớp 11A3
-        student_1_11a3 = Student(last_name="Huỳnh Tấn", first_name="Q", dob='2002-01-01 00:00:00', sex=True,
-                                 address="",
+        student_1_11a3 = Student(last_name="Huỳnh Tấn", first_name="Q", dob='2002-01-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='1005')
-        student_2_11a3 = Student(last_name="Trần Minh", first_name="S", dob='2002-02-01 00:00:00', sex=True,
-                                 address="",
+        student_2_11a3 = Student(last_name="Trần Minh", first_name="S", dob='2002-02-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='1006')
-        student_3_11a3 = Student(last_name="Trần", first_name="T", dob='2002-03-01 00:00:00', sex=False,
-                                 address="",
+        student_3_11a3 = Student(last_name="Trần", first_name="T", dob='2002-03-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='1007')
-        student_4_11a3 = Student(last_name="Lê Thị", first_name="Y", dob='2002-04-01 00:00:00', sex=False,
-                                 address="",
+        student_4_11a3 = Student(last_name="Lê Thị", first_name="Y", dob='2002-04-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='1008')
-        student_5_11a3 = Student(last_name="Lê Trí", first_name="A", dob='2002-05-01 00:00:00', sex=True,
-                                 address="",
+        student_5_11a3 = Student(last_name="Lê Trí", first_name="A", dob='2002-05-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='1009')
 
         # Khối 12
         # Học sinh lớp 12A1
-        student_1_12a1 = Student(last_name="Nguyễn Văn", first_name="A", dob='2001-01-01 00:00:00', sex=True,
-                                 address="",
+        student_1_12a1 = Student(last_name="Nguyễn Văn", first_name="A", dob='2001-01-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='9000')
-        student_2_12a1 = Student(last_name="Nguyễn Văn", first_name="B", dob='2001-02-01 00:00:00', sex=True,
-                                 address="",
+        student_2_12a1 = Student(last_name="Nguyễn Văn", first_name="B", dob='2001-02-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='9001')
-        student_3_12a1 = Student(last_name="Trần Thị", first_name="C", dob='2001-03-01 00:00:00', sex=False,
-                                 address="",
+        student_3_12a1 = Student(last_name="Trần Thị", first_name="C", dob='2001-03-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='9002')
-        student_4_12a1 = Student(last_name="Lê Thị", first_name="D", dob='2001-04-01 00:00:00', sex=False,
-                                 address="",
+        student_4_12a1 = Student(last_name="Lê Thị", first_name="D", dob='2001-04-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='9003')
-        student_5_12a1 = Student(last_name="Lê Trí", first_name="E", dob='2001-05-01 00:00:00', sex=True,
-                                 address="",
+        student_5_12a1 = Student(last_name="Lê Trí", first_name="E", dob='2001-05-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='9004')
         # Học sinh lớp 12A2
-        student_1_12a2 = Student(last_name="Huỳnh Tấn", first_name="P", dob='2001-06-01 00:00:00', sex=True,
-                                 address="",
+        student_1_12a2 = Student(last_name="Huỳnh Tấn", first_name="P", dob='2001-06-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='9005')
-        student_2_12a2 = Student(last_name="Trần Minh", first_name="L", dob='2001-07-01 00:00:00', sex=True,
-                                 address="",
+        student_2_12a2 = Student(last_name="Trần Minh", first_name="L", dob='2001-07-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='9006')
-        student_3_12a2 = Student(last_name="Trần", first_name="M", dob='2001-08-01 00:00:00', sex=False,
-                                 address="",
+        student_3_12a2 = Student(last_name="Trần", first_name="M", dob='2001-08-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='9007')
-        student_4_12a2 = Student(last_name="Lê Thị", first_name="N", dob='2001-09-01 00:00:00', sex=False,
-                                 address="",
+        student_4_12a2 = Student(last_name="Lê Thị", first_name="N", dob='2001-09-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='9008')
-        student_5_12a2 = Student(last_name="Lê Trí", first_name="O", dob='2001-10-01 00:00:00', sex=True,
-                                 address="",
+        student_5_12a2 = Student(last_name="Lê Trí", first_name="O", dob='2001-10-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='9009')
         # Học sinh lớp 12A3
-        student_1_12a3 = Student(last_name="Huỳnh Tấn", first_name="Q", dob='2001-01-01 00:00:00', sex=True,
-                                 address="",
+        student_1_12a3 = Student(last_name="Huỳnh Tấn", first_name="Q", dob='2001-01-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='9010')
-        student_2_12a3 = Student(last_name="Trần Minh", first_name="S", dob='2001-02-01 00:00:00', sex=True,
-                                 address="",
+        student_2_12a3 = Student(last_name="Trần Minh", first_name="S", dob='2001-02-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='9011')
-        student_3_12a3 = Student(last_name="Trần", first_name="T", dob='2001-03-01 00:00:00', sex=False,
-                                 address="",
+        student_3_12a3 = Student(last_name="Trần", first_name="T", dob='2001-03-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='9012')
-        student_4_12a3 = Student(last_name="Lê Thị", first_name="Y", dob='2001-04-01 00:00:00', sex=False,
-                                 address="",
+        student_4_12a3 = Student(last_name="Lê Thị", first_name="Y", dob='2001-04-01 00:00:00', sex=SexEnum.Nữ.name,
+                                 address="Text",
                                  phone_number='9013')
-        student_5_12a3 = Student(last_name="Lê Trí", first_name="A", dob='2001-05-01 00:00:00', sex=True,
-                                 address="",
+        student_5_12a3 = Student(last_name="Lê Trí", first_name="A", dob='2001-05-01 00:00:00', sex=SexEnum.Nam.name,
+                                 address="Text",
                                  phone_number='9014')
 
         db.session.add_all([student_1_10a1, student_2_10a1, student_3_10a1, student_4_10a1, student_5_10a1,

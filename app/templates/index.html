@@ -38,11 +38,7 @@
                             <td>{{ student.fullname }}</td>
                             <td>{{ (student.dob).strftime('%d/%m/%Y') }}</td>
                             <td>
-                                {% if student.sex == True %}
-                                Male
-                                {% else %}
-                                Female
-                                {% endif %}
+                               {{student.sex.name}}
                             </td>
                             <td>{{ student.classroom }}</td>
                         </tr>
