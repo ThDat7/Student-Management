@@ -96,7 +96,7 @@ class AverageScoreStatsView(AuthenticatedTeacherBaseView):
                     'value': teach.subject.name
                 },
             ],
-            'stat_labels': ['Họ', 'Tên', 'Điểm TB HK1', 'Điểm TB HK2'],
+            'stat_labels': ['Họ và tên đệm', 'Tên', 'Điểm TB HK1', 'Điểm TB HK2'],
             'stat_cols': ['last_name', 'first_name', 'avg_I', 'avg_II'],
             'stat_data': []
         }

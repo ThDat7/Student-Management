@@ -1,0 +1,28 @@
+body {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 1.1rem !important;
+    background-image: url(../images/choosing-bg.jpg) !important;
+}
+
+div.container {
+    background-image: url(../images/choosing-bg.jpg) !important;
+    color: #ffffff !important;
+}
+
+p.text-muted {
+    color: #ccddff !important;
+}
+
+div.container > table.table, div.container > div.table-responsive > table.table, div.container > ul.nav {
+    margin-top: 20px;
+    color: #ffffff !important;
+}
+
+div.container > table.table tbody tr:hover, div.container > div.table-responsive > table.table tbody tr:hover{
+    color: #ff4d4d !important;
+}
+
+div.modal-content {
+    color: black !important;
+}
+

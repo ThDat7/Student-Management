@@ -35,10 +35,7 @@
     <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/fontawesome.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templatemo-grad-school.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/owl.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/lightbox.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/admin.css') }}">
 
     <!-- Bootstrap cdn -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
@@ -52,6 +49,25 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
+
+    <script>
+        function seeStatsDetails() {
+            let no_chartjs = document.getElementById("no-chartjs");
+            let have_chartjs = document.getElementById("have-chartjs")
+            let btn = document.getElementById("see-detail")
+
+            if (btn.value === "Hiện biểu đồ") {
+                no_chartjs.style.display = "none";
+                have_chartjs.style.display = "flex"
+                btn.value = "Ẩn biểu đồ"
+            }
+            else {
+                no_chartjs.style.display = "block";
+                have_chartjs.style.display = "none"
+                btn.value = "Hiện biểu đồ"
+            }
+        }
+    </script>
 
     {% if admin_view.extra_css %}
     {% for css_url in admin_view.extra_css %}

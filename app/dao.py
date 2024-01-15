@@ -202,19 +202,20 @@ def upload_image(avatar, id):
 
 
 def phone_student(kw):
-    data = (db.session.query(Student.id,
-                             Student.first_name,
-                             Student.last_name,
-                             Student.dob,
-                             Student.sex,
-                             Classroom)
+    data = (db.session.query(Student, Classroom)
             .join(Student_ClassRoom, Student.id == Student_ClassRoom.student_id)
             .join(Classroom, Student_ClassRoom.classroom_id == Classroom.id)
             .filter(Student.phone_number.__eq__(kw))
             .first())
 
-    id, first_name, last_name, dob, sex, classroom = data
-    return  {'id': id, 'fullname': f'{last_name} {first_name}', 'dob': dob, 'sex': sex, 'classroom': classroom.__str__()}
+    if data is None:
+        return data
+
+    return {'id': data.Student.id,
+            'fullname': f'{data.Student.last_name} {data.Student.first_name}',
+            'dob': data.Student.dob,
+            'sex': data.Student.sex,
+            'classroom': data.Classroom.__str__()}
 
 
 def score_student_one(kw):

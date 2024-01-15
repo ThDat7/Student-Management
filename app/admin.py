@@ -6,7 +6,6 @@ from flask_login import current_user
 from teacher import AverageScoreStatsView
 
 
-
 class AuthenticatedAdminModelView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.role == RoleEnum.ADMIN
@@ -134,21 +133,21 @@ class UserView(AuthenticatedAdminModelView):
     edit_modal = True
     details_modal = True
     create_modal = True
-    column_list = ['id', 'name', 'dob', 'address', 'sex', 'phone', 'email', 'username', 'password', 'avatar',
-                   'user_role', 'role']
+    column_list = ['id', 'last_name', 'first_name', 'dob', 'address', 'sex', 'phone', 'email', 'username', 'password',
+                   'avatar', 'role']
     column_labels = {
         'id': 'STT',
-        'name': 'Họ Và Tên',
-        'dob': 'Ngày Sinh',
-        'address': 'Địa Chỉ',
-        'sex': 'Giới Tính',
-        'phone': 'Số Điện Thoại',
+        'last_name': 'Họ và tên đệm',
+        'first_name': 'Tên',
+        'dob': 'Ngày sinh',
+        'address': 'Địa chỉ',
+        'sex': 'Giới tính',
+        'phone': 'Số điện thoại',
         'email': 'Email',
-        'username': 'Tên Tài Khoản',
-        'password': 'Mật Khẩu',
-        'avatar': 'Ảnh Đại Diện',
-        'user_role': 'Vai Trò',
-        'role': 'Chức Vụ'
+        'username': 'Tên tài khoản',
+        'password': 'Mật khẩu',
+        'avatar': 'Ảnh đại diện',
+        'role': 'Vai trò'
     }
 
 

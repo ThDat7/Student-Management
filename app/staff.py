@@ -60,7 +60,7 @@ class StudentView(AuthenticatedStaff):
     column_list = ['id', 'last_name', 'first_name', 'dob', 'sex', 'address', 'email', 'phone_number', 'classroom']
     column_labels = {
         'id': 'STT',
-        'last_name': 'Họ',
+        'last_name': 'Họ và tên đệm',
         'first_name': 'Tên',
         'dob': 'Ngày sinh',
         'sex': 'Giới tính',

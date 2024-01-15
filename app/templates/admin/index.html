@@ -5,6 +5,12 @@
     <style>
         nav.navbar {
             display: block !important;
+            width: 100%;
+        }
+
+        div.card-body {
+            background-image: url({{ url_for('static', filename='assets/images/choosing-bg.jpg') }}) !important;
+            color: #ffffff !important;
         }
     </style>
 <form action="/admin/upload" method="post" enctype="multipart/form-data">
@@ -26,7 +32,7 @@
                             <p class="text-muted mb-4">Thời gian tạo tài khoản:
                                 {{current_user.joined_date.strftime('%d/%m/%Y')}}</p>
                             <div class="d-flex justify-content-center mb-2">
-                                <a type="button" class="btn btn-danger m-2" href="/logout">ĐĂNG XUẤT</a>
+                                <a type="button" class="btn btn-danger m-2" href="/logout">Đăng xuất</a>
                                 <button type="submit" class="btn btn-primary m-2" >Thay
                                     đổi avatar</button>
                             </div>
@@ -103,6 +109,11 @@
     <style>
         nav.navbar {
             display: none !important;
+        }
+
+        div.card-body {
+            background-image: #424242 !important;
+            color: #ffffff !important;
         }
     </style>
 {% include 'admin/login.html' %}
