@@ -196,9 +196,11 @@ def upload_image(avatar, id):
     if avatar:
         res = cloudinary.uploader.upload(avatar)
         user.avatar = res['secure_url']
+        db.session.add(user)
+        db.session.commit()
+    else:
+        raise Exception("Cập nhật ảnh đại diện thất bại!!!Vui lòng cung cấp file ảnh")
 
-    db.session.add(user)
-    db.session.commit()
 
 
 def phone_student(kw):

@@ -80,7 +80,7 @@
                                 {% if e.s2 == None %}
                                 None
                                 {% else %}
-                                {{ e.s2 }}
+                                {{ e.s2.replace(',', '︎ ︎ ︎ ︎︎ ︎ ︎') }}
                                 {% endif %}
                             </td>
                             <td>{{ e.final_score }}</td>
@@ -98,7 +98,7 @@
                                 {% if e2.s2 == None %}
                                 None
                                 {% else %}
-                                {{ e2.s2 }}
+                                {{ e2.s2.replace(',', '︎ ︎ ︎ ︎︎ ︎ ︎') }}
                                 {% endif %}
                             </td>
                             <td>{{ e2.final_score }}</td>
@@ -117,5 +117,4 @@
         </div>
     </div>
 </section>
-
 {% endblock %}

@@ -172,7 +172,7 @@ class NormalExam(db.Model):
 
     @orm.validates('score')
     def validate_score(self, key, value):
-        if 0.0 > value or value > 10.0:
+        if not 0 <= value <= 10:
             raise Exception(f'Điểm {value} nhập vào không hợp lệ')
         return value
 

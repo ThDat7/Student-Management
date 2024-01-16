@@ -172,8 +172,11 @@ def logout():
 @app.route('/admin/upload', methods=['GET', 'POST'])
 def upload_img():
     if request.method.__eq__('POST'):
-        avatar = request.files.get('avatar')
-        dao.upload_image(avatar=avatar, id=current_user.id)
+        try:
+            avatar = request.files.get('avatar')
+            dao.upload_image(avatar=avatar, id=current_user.id)
+        except Exception as e:
+            return Response(str(e), status=400)
     return redirect('/admin')
 
 
