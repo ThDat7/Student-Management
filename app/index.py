@@ -72,7 +72,7 @@ def create_exam():
     })
 
 
-@app.route('/api/normal_exam/<id>', methods=['PUT'])
+@app.route('/api/normal_exam/<int:id>', methods=['PUT'])
 def update_normal_exam(id):
     data = request.json
     exam_id = data.get('exam_id')
@@ -106,7 +106,7 @@ def create_normal_exam():
         return Response(str(e), status=400)
 
 
-@app.route('/api/normal_exam/<id>', methods=['DELETE'])
+@app.route('/api/normal_exam/<int:id>', methods=['DELETE'])
 def delete_normal_exam(id):
     data = request.json
     exam_id = data.get('exam_id')
@@ -115,7 +115,7 @@ def delete_normal_exam(id):
     return jsonify({'id': id})
 
 
-@app.route('/api/final_exam/<id>', methods=['POST'])
+@app.route('/api/final_exam/<int:id>', methods=['POST'])
 def update_final_exam(id):
     data = request.json
     score = float(data.get('score'))
@@ -140,7 +140,7 @@ def search_student():
     })
 
 
-@app.route('/api/student/<id>', methods=['GET'])
+@app.route('/api/student/<int:id>', methods=['GET'])
 def get_student(id):
     student = dao.get_student(id)
     return jsonify({
@@ -186,5 +186,5 @@ if __name__ == '__main__':
     with app.app_context():
         init_config_defaults()
 
-    app.run(debug=not (hasattr(sys, 'gettrace') and sys.gettrace() is not None))
-    # app.run()
+    # app.run(debug=not (hasattr(sys, 'gettrace') and sys.gettrace() is not None))
+    app.run()

@@ -5,7 +5,7 @@ from flask_admin.model.fields import InlineFieldList
 from flask_login import current_user
 from sqlalchemy import func
 from wtforms import Form, FormField, FloatField, SelectField, IntegerField, Field, StringField
-from flask import request
+from flask import request, jsonify
 
 from app import admin, dao
 from app.models import *
@@ -34,11 +34,20 @@ class TeachView(AuthenticatedTeacherModelView):
     edit_modal = True
     can_delete = False
     can_create = False
+    column_filters = ('classroom', 'classroom.year')
 
     edit_modal_template = 'admin/model/modals/teach_edit.html'
 
     def get_one(self, id):
         return dao.get_teach_data(id)
+
+    def get_list(self, page, sort_column, sort_desc, search, filters,
+                 execute=True, page_size=None):
+        count_query = self.get_count_query() if not self.simple_list_pager else None
+        count = count_query.scalar() if count_query else None
+
+        query = db.session.query(Teach).join(Teacher).filter(Teacher.user_id == current_user.id).all()
+        return count, query
 
 
 class AverageScoreStatsView(AuthenticatedTeacherBaseView):
@@ -118,6 +127,8 @@ class AverageScoreStatsView(AuthenticatedTeacherBaseView):
 
     def avg_score(self, query, student):
         exams = query.filter(Exam.student_id.__eq__(student.id)).all()
+        # if len(exams) == 0:
+        #     raise Exception("Điểm vẫn chưa nhập đủ")
         avg_score = 0.0
         for exam in exams:
             factor = 0

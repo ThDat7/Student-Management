@@ -38,7 +38,8 @@
 
 <script>
     $('.delete-student').on('click', function() {
-        $(this).closest('tr').remove()
+        if (confirm('Ban co muon xoa hoc sinh nay'))
+            $(this).closest('tr').remove()
     })
 </script>
 {% endmacro %}

@@ -39,12 +39,15 @@
 <input id="see-detail" type="button" value="Hiện biểu đồ" style="width: 20%; margin: 10px auto" onclick="seeStatsDetails()">
 
 <script>
-    let data = {{ data.stat_data | safe }}
-    let class_data = data.map(e => e.classroom)
-    let pass_num_data = data.map(e => e.pass_num)
-    let fail_num_data = data.map(e => e.student_count - e.pass_num)
+    var data = {{ data.stat_data | safe }}
+    var class_data = data.map(e => e.classroom)
+    var pass_num_data = data.map(e => e.pass_num)
+    var fail_num_data = data.map(e => e.student_count - e.pass_num)
 
     Chart.register(ChartjsPluginStacked100.default)
+
+    var chartStatus = Chart.getChart("myChart")
+    if (chartStatus) chartStatus.destroy()
 
     new Chart('myChart', {
         type: 'bar',

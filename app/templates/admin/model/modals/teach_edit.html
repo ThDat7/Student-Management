@@ -37,7 +37,9 @@
                 </td>
             </tr>
         </table>
-
-        {% include 'admin/model/modals/teach_table.html' %}
     </div>
+    {% include 'admin/model/modals/teach_table.html' %}
+
+
+<script src="{{ url_for('static', filename='assets/js/teach-table.js') }}"></script>
 {% endblock %}

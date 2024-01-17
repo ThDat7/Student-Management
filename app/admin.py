@@ -1,3 +1,5 @@
+from flask import flash, redirect, url_for, jsonify
+from flask_admin.babel import gettext
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import BaseView, expose
 from app import app, db, admin
@@ -23,23 +25,24 @@ class StudyStatsView(AuthenticatedAdminBaseView):
 
     def get_list(self):
         list_data = {
-            'labels': ['Năm học', 'Học kỳ', 'Môn học'],
-            'cols': ['year', 'semester', 'subject'],
+            'labels': ['Năm học', 'Học kỳ', 'Môn học', "Khối"],
+            'cols': ['year', 'semester', 'subject', 'grade'],
             'data': []
         }
         teach = ((db.session.query(
             Teach.id,
             Classroom.year,
             Teach.semester,
-            Subject.name
+            Subject.name,
+            Classroom.grade
         )
                   .select_from(Teach)
                   .join(Classroom, Teach.classroom_id.__eq__(Classroom.id))
                   .join(Subject, Teach.subject_id.__eq__(Subject.id))
-                  .group_by(Classroom.year, Subject.id, Teach.semester))
+                  .group_by(Classroom.year, Subject.id, Teach.semester, Classroom.grade))
                  .all())
-        data = [{'id': id, 'year': year, 'semester': teach_semester, 'subject': subject}
-                for id, year, teach_semester, subject in teach]
+        data = [{'id': id, 'year': year, 'semester': teach_semester, 'subject': subject, 'grade': grade.value}
+                for id, year, teach_semester, subject, grade in teach]
 
         list_data['data'] = data
         return list_data
@@ -101,14 +104,18 @@ class StudyStatsView(AuthenticatedAdminBaseView):
 
             pass_rate = pass_num / stat['student_count']
             stat['pass_num'] = pass_num
-            stat['pass_rate'] = pass_rate
+            stat['pass_rate'] = f'{pass_rate * 100}%'
             data['stat_data'].append(stat)
 
         return data
 
     @expose('/stats_detail/<id>')
     def stats_detail(self, id):
-        data = self.get_detail(id)
+        data = {}
+        try:
+            data = self.get_detail(id)
+        except Exception as e:
+            return jsonify({'err': str(e)}), 400
         return self.render('admin/model/modals/stats_details.html', data=data)
 
 

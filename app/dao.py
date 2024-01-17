@@ -17,6 +17,11 @@ def authenticate_user(username, password):
 
 
 def create_exam(student_id, teach_id):
+    is_teacher_teach_that = db.session.query(Teacher).join(Teach).filter(Teacher.user_id == current_user.id,
+                                                                         Teach.id == teach_id).count()
+    if is_teacher_teach_that == 0:
+        return
+
     exam = Exam(student_id=student_id, teach_id=teach_id)
     db.session.add(exam)
     db.session.commit()
@@ -29,8 +34,7 @@ def update_normal_exam(exam_id, id, score):
                    .join(Exam)
                    .join(Teach)
                    .join(Teacher)
-                   .join(User)
-                   .filter(User.id.__eq__(current_user.id),
+                   .filter(Teacher.user_id.__eq__(current_user.id),
                            Exam.id.__eq__(exam_id),
                            NormalExam.id.__eq__(id))
                    .first())
@@ -79,8 +83,7 @@ def delete_normal_exam(id, exam_id):
                    .join(Exam)
                    .join(Teach)
                    .join(Teacher)
-                   .join(User)
-                   .filter(User.id.__eq__(current_user.id),
+                   .filter(Teacher.user_id.__eq__(current_user.id),
                            Exam.id.__eq__(exam_id),
                            NormalExam.id.__eq__(id))
                    .first())
@@ -97,10 +100,10 @@ def update_final_exam(exam_id, score):
     exam = (db.session.query(Exam)
             .join(Teach)
             .join(Teacher)
-            .join(User)
-            .filter(User.id.__eq__(current_user.id),
+            .filter(Teacher.user_id.__eq__(current_user.id),
                     Exam.id.__eq__(exam_id))
             .first())
+
     if exam:
         if exam.final_exam is None:
             exam.final_exam = FinalExam(exam_id=exam.id)
@@ -185,7 +188,7 @@ def get_student(id):
 
     return {'last_name': student.last_name,
             'first_name': student.first_name,
-            'sex': student.sex,
+            'sex': student.sex.name,
             'dob': student.dob,
             'address': student.address
             }
@@ -200,7 +203,6 @@ def upload_image(avatar, id):
         db.session.commit()
     else:
         raise Exception("Cập nhật ảnh đại diện thất bại!!!Vui lòng cung cấp file ảnh")
-
 
 
 def phone_student(kw):

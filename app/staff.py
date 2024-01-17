@@ -20,7 +20,6 @@ class AuthenticatedStaff(ModelView):
 class ClassroomView(AuthenticatedStaff):
     column_display_pk = True
     can_view_details = True
-    form_excluded_columns = ('students')
     can_export = True
     edit_modal = True
     details_modal = True
@@ -36,6 +35,12 @@ class ClassroomView(AuthenticatedStaff):
     }
     details_modal_template = 'admin/model/modals/classroom_details.html'
     edit_modal_template = 'admin/model/modals/classroom_edit.html'
+
+    def on_model_change(self, form, model, is_created):
+        max_student_num, = db.session.query(Config.value).filter(Config.key == ConfigKeyEnum.MAX_NUM).first()
+
+        if len(model.students) > max_student_num:
+            raise Exception(f'Vượt quá số học sinh trên 1 lớp ({max_student_num})')
 
     def get_list(self, page, sort_column, sort_desc, search, filters,
                  execute=True, page_size=None):

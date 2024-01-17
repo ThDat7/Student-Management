@@ -20,7 +20,7 @@
             <div class="d-flex" style="height: 12rem">
                 <div class="w-50 py-3">
                     <input type="text" class="form-control searchInput" placeholder="Nhập tên học sinh">
-                    <div class="list-group searchResults"></div>
+                    <div class="list-group searchResults bg-info" style="max-height: 140px; overflow-y: auto;"></div>
                 </div>
                 <div style='display:none' class="selectedStudent container w-50 py-3">
                     Họ: <span class="last_name"></span> <br/>
@@ -119,7 +119,8 @@
             </tr>
             `)
             $('.delete-student').on('click', function () {
-                $(this).closest('tr').remove()
+                if (confirm('Ban co muon xoa hoc sinh nay'))
+                    $(this).closest('tr').remove()
             })
 
 
@@ -134,7 +135,7 @@
             if (student_name === '')
                 return
 
-            let table_ids  = $('.classroom-table > tbody tr').map(function () {
+            let table_ids = $('.classroom-table > tbody tr').map(function () {
                 return $(this).data('student-id');
             }).get();
             $.ajax({

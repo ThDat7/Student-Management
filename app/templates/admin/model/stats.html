@@ -58,13 +58,25 @@
     <script src="{{ url_for('static', filename='assets/js/chartjs-plugin-stacked100.js') }}"></script>
 
     <script>
-
         $(".a-modals").click(function (event) {
             var url = this.href
 
-            fetch(url, {method: 'GET'})
-                .then(response => response.text())
-                .then(tables => $('.modal-content').html(tables))
-        });
+            $.ajax({
+                type: 'GET',
+                url: url,
+                contentType: "application/json; charset=utf-8",
+                traditional: true,
+                success: (data) => {
+                    $('.modal-content').html(data)
+                },
+                error: (res) => {
+                    $('.modal-content').html(`
+                    <div class="modal-body">
+                        ${res.responseJSON.err}
+                    </div>
+                    `)
+                }
+            })
+        })
     </script>
 {% endblock %}
