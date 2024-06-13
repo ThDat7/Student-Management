@@ -1,44 +1,34 @@
-# Student_Web
--Chỉnh sửa lại chọn ngày sinh ở quản lý học sinh
+# Student Management
 
+## Introduction
 
-#Chỉnh lỗi group_by trong MySQL
-SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+The Student Management system is designed to streamline the administration and management of student-related information, including user management, class and teacher assignments, student records, and academic performance tracking.
 
+## Table of Contents:
 
-#CSS bg-images (tạm thời chưa bỏ vào admin/base.html)
-body {
-     background-image: url("{{ url_for('static', filename='assets/images/choosing-bg.jpg') }}")
-}
+1. [Introduction](#introduction)
+2. [Features](#features)
+3. [Technologies Used](#technologies-used)
 
-table {
-     color: #66ccff !important;
-}
+## Features
 
+- **User Management:** Manage different types of users.
+- **Class and Teacher Management:** Manage classes and teacher assignments.
+- **Student Information Management:** Maintain detailed student records.
+- **Class Enrollment:** Manage student enrollment in classes.
+- **Grade Entry:** Teachers can enter grades for their assigned subjects.
+- **Academic Performance Statistics:** View and analyze student performance statistics.
 
-Mô hình dữ liệu lớp học như sau
-- Trường học có 3 khối: 10, 11, 12
+## Technologies Used
 
-- Mỗi khối có 3 lớp, gồm:
-    + Khối 10: 10a1, 10a2, 10a3
-    + Khối 11: 11a1, 11a2, 11a3
-    + Khối 12: 12a1, 12a2, 12a3
+### Languages
 
-- Mỗi khối có 2 môn học, gồm:
-    + Khối 10: Toán, Lịch sử
-    + Khối 11: Toán, Lịch sử
-    + Khối 12: Toán, Tiếng anh
+- Python
+- JavaScript
+- SQL
 
-- Gồm có 2 admin, 4 giáo viên, 1 nhân viên
+### Frameworks
 
-- Mỗi lớp gồm 5 học sinh (tổng cộng 45 học sinh) và giáo viên chủ nhiệm mỗi lớp như sau:
-    + Lớp 10a1, 10a2, 12a3: Giáo viên 1
-    + Lớp 10a3, 11a1: Giáo viên 2
-    + Lớp 11a2, 11a3: Giáo viên 3
-    + Lớp 12a1, 12a2: Giáo viên 4
-
-- Lịch giảng dạy của giáo viên như sau:
-    + Giáo viên 1: dạy Toán Khối 11 và 12
-    + Giáo viên 2: dạy Lịch sử Khối 10 và 11
-    + Giáo viên 3: dạy Tiếng anh Khối 12
-    + Giáo viên 4: dạy Toán khối 10
+- Flask
+- Bootstrap
+- Jquery
